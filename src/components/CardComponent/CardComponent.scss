@@ -1,0 +1,100 @@
+.card_item{
+    position: relative;
+    min-height: 350px;
+    max-height: 470px;
+    height: 100%;
+    border: 1.6px solid #E2E2E2;
+    border-radius: 20px;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+    // margin-top: 70px;
+
+    .icon_love:hover {
+    
+        stroke: red;
+    }
+    .icon_love {
+        position: absolute;
+        top:15px;
+        right: 15px;
+
+    }
+// product_order
+ 
+    .product_order{
+        justify-content: center;
+        margin-bottom: 15px;
+        visibility: hidden;
+        display: flex;
+        button , .icon_buy, .icon_detail {
+            border-radius: 6px;
+            border: 1.6px solid #E2E2E2;
+            font-weight: 600;
+        }
+
+
+        .icon_detail:hover,
+        button:hover,
+        .icon_buy:hover {
+            background-color: #ebe7e7;
+            border: 1px solid #000;
+        }
+       
+        button{
+            cursor: pointer;
+            margin: 0 15px;
+            padding: 0 10px;
+            min-width: 90px;
+        }
+        .icon_buy,.icon_detail {
+            height: 40px;
+            width: 42px;
+            padding: 10px 22px;
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    &:hover .product_order {
+        visibility: visible;
+    }
+
+    //
+    .product_title {
+        position: relative;
+        font-size: 18px;
+        line-height: 1.5;
+        color: #333;
+        padding-bottom: 8px;
+        
+    }
+
+    .product_title::after{
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translatex(-50%);
+        width: 40px;
+        border: .719614px solid #D0D5DF;
+    }
+
+    .product_description{
+        font-size: 18px;
+        line-height: 32px;
+        margin-top: 13.5px;
+    }
+
+    .product_price {
+        font-size: 20px;
+        line-height: 32px;
+        color: #000;
+    }
+    
+   
+}
+

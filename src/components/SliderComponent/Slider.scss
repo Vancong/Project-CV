@@ -1,0 +1,22 @@
+
+
+.slick-prev{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    padding: 0 30px;
+    transform: translateY(-50%);
+    border: none;
+    z-index: 2;
+}
+
+.slick-next{
+    position: absolute;
+    top: 50%;
+    right: 0;
+    padding: 0 40px;
+    transform: translateY(-50%);
+    border: none;
+    z-index: 2;
+}
+

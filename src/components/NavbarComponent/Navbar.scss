@@ -1,0 +1,19 @@
+
+.navbar {
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+}
+.nav_content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nav_price {
+    padding: 4px 10px;
+    border-radius: 10px;
+    background: #eeeeee;
+    width: fit-content;
+    
+}

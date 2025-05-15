@@ -1,0 +1,21 @@
+@use "sass:map";
+@import "../../style/pages/all.scss";
+
+.header_top{
+    display: flex;
+    padding-top: 20px;
+    align-items: center;    
+    background: rgb(255 255 255 / 73%);
+    
+}
+.user {
+    display: flex;
+    align-items: cennter;
+    gap:10px;
+
+    .user_text{
+        font-size: 15px;
+        font-weight: 600;
+    }
+}
+

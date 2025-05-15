@@ -1,0 +1,27 @@
+@use "sass:map";
+
+
+@import "./thems.scss";
+
+html,
+body {
+    margin:  0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+* {
+    // font-family: Roboto;
+    // font-size: 62.5%;
+}
+a {
+    text-decoration: none;
+}
+ul li {
+    list-style: none;
+}
+
+.container {
+    padding: 0 120px;
+    
+}
