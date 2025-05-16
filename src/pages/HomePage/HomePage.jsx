@@ -21,7 +21,7 @@ const HomePage = () => {
           })}
         </div>
 
-        <SliderComponent  arrImages={[slide1,slide2,slide3,slide4]} />
+        <SliderComponent  arrImages={[slide1,slide2,slide3,slide4]} autoplay={true} />
         <div className='container'>
             <div className='card'>
                 <CardComponent />

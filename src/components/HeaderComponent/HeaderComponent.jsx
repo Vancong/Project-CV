@@ -1,7 +1,7 @@
 import React from 'react'
 import { Badge, Col } from 'antd';
 import { WrapperHeader, WrapperHeaderAccout, WrapperTextHeader, WrapperTextHeaderSmall } from './d';
-import { AudioOutlined } from '@ant-design/icons';
+
 import { Input, Space } from 'antd';
 import {UserOutlined,CaretDownOutlined,ShoppingCartOutlined,HeartOutlined } from '@ant-design/icons';
 import "./header.scss";

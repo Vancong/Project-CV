@@ -2,14 +2,14 @@ import React from 'react'
 import Slider from "react-slick"
 import { Image } from 'antd';
 import "./Slider.scss"
-const SliderComponent = ({arrImages}) => {
+const SliderComponent = ({arrImages,autoplay}) => {
     let settings = {
         dots: true,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
-        autoplay:true,
+        autoplay:autoplay,
         autoplaySpeed:2000,
         arrows:true,
      

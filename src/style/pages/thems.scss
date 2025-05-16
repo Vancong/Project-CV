@@ -7,6 +7,9 @@ $theme-colors :(
 .color-main {
     color: map-get($theme-colors, "main" )
 }
+.container{
+    padding: 0 120px;
+}
 
 
 .button_hover:hover {
