@@ -1,17 +1,21 @@
 import React from 'react'
 import {Button } from 'antd'
-const ButtonCompoent = ({size,icon=null,styleButton,styleTextButton,textButton,...rest}) => {
+const ButtonComponent = ({size,icon=null,styleButton,styleTextButton,textButton,disabled,...rest}) => {
   return (
         <Button 
+
+            style={{
+              ...styleButton,
+              background: disabled ? '#ccc' : styleButton.background
+            }}
             size= {size}
-            
-            {...rest}
-            style={styleButton}
             icon={icon}  
+      
+            {...rest}
             >
             <span style={styleTextButton}> {textButton} </span>
         </Button>
   )
 }
 
-export default ButtonCompoent
+export default ButtonComponent

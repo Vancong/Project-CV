@@ -11,6 +11,18 @@
     font-weight: 500;
     // margin-top: 70px;
 
+    .selled-product {
+        position: absolute;
+        top:15px;
+        left: 15px;
+        color: white;
+        background-color: #FF0000;
+        padding: 0 10px;
+        z-index: 1;
+        line-height: 1.6;
+        font-size: 15px;
+        border-radius: 16px;
+    }
     .icon_love:hover {
     
         stroke: red;
@@ -21,6 +33,8 @@
         right: 15px;
 
     }
+
+    
 // product_order
  
     .product_order{

@@ -1,0 +1,54 @@
+.profile-user {
+    width: 1270px;
+    height: 500px;
+    margin: 0 auto;
+    text-align: center;
+    h1 {
+        margin: 20px 0;
+        font-weight: 600;
+        color: #333;
+        font-size: 22px;
+    }
+
+    .content-profile{
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #ccc;
+        width: 520px;
+        margin: 0 auto;
+        padding: 30px 40px;
+        border-radius: 10px;
+        gap:25px;
+        
+        .wrapper-input{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+           
+            label{
+                margin: 0;
+                width:120px;
+                color: #333;
+                font-weight: 600;
+                font-size: 14px;
+                white-space: nowrap;
+        }
+        }
+    }
+    
+    // .ant-upload.ant-upload-select-ant.ant-upload-select-picture-card{
+    //     height:60px;
+    //     width:60px;
+    //     border-radius: 50%;
+    //     object-fit:cover;
+    // }
+    .ant-upload-list-item-name,.ant-upload-list-item.ant-upload-list-item-error{
+        display: none;
+    }
+    .img-avt{
+        height:60px;
+        width:60px;
+        border-radius: 50%;
+        object-fit:cover;
+    }
+}

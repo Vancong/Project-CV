@@ -4,7 +4,7 @@ import imageProduct from "../../assets/images/nuochoa.webp"
 import slider1 from "../../assets/images/slide1.webp"
 import slider2 from "../../assets/images/slide2.webp"
 import SliderComponent from '../SliderComponent/SliderComponent';
-import ButtonCompoent from '../ButtonComponent/ButtonComponent';
+import ButtonComponent from '../ButtonComponent/ButtonComponent';
 import {HeartOutlined } from '@ant-design/icons';
 import { Fomater } from '../../utils/fomater';
 import "./ProductDetailsCompoent.scss"
@@ -83,7 +83,7 @@ const ProductDetailsCompoent = () => {
             </div>
           </div>
           <div className='btn-shopping'>
-              <ButtonCompoent  
+              <ButtonComponent  
                               styleButton={{background: '#000000',fontWeight:'500',lineHeight:'28px',
                                             color: '#ffffff',padding:'30px 24px',border:'none',borderRadius:'4px',
                                             fontSize:'25px',width:'50%'
@@ -92,7 +92,7 @@ const ProductDetailsCompoent = () => {
                               textButton={'Thêm vào giỏ hàng'}
                                />
               
-               <ButtonCompoent  
+               <ButtonComponent  
                               styleButton={{background: '#e30613',fontWeight:'500',lineHeight:'28px',
                                             color: '#ffffff',padding:'30px 24px',border:'none',borderRadius:'4px',
                                             fontSize:'25px',width:'50%'
@@ -103,7 +103,7 @@ const ProductDetailsCompoent = () => {
                  
           </div>
            <div className="btn-icon">
-                <ButtonCompoent  
+                <ButtonComponent  
                 styleButton={{background: '#fffff',fontWeight:'500',lineHeight:'28px',
                               color: '#bcb49',padding:'35px 24px',border:' 1px solid #000',borderRadius:'4px',
                               fontSize:'25px',width:'100%',marginTop:'20px'

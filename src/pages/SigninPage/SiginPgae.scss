@@ -1,0 +1,28 @@
+.siginPage {
+    height: 100vh;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page {
+    width: 500px;
+    height: 445px;
+    border-radius: 6px;
+    background-color:#fff;
+    padding: 40px 45px 24px;
+    text-align: center;
+   
+}
+
+.inputAcccount {
+    margin-top: 10px;
+    width: 300px;
+    border-top:none;
+    border-right: none;
+    border-left: none;
+    background-color: rgb(232,240,254);
+    outline: none;
+
+}

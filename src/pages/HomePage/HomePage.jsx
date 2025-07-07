@@ -8,11 +8,27 @@ import slide3 from "../../assets/images/slide3.webp";
 import slide4 from "../../assets/images/slide4.webp";
 import CardComponent from '../../components/CardComponent/CardComponent';
 import NavbarComponent from '../../components/NavbarComponent/NavbarComponent';
-import { Button } from 'antd/es/radio';
 import ButtonCompoent from '../../components/ButtonComponent/ButtonComponent';
+import *as Product from "../../services/Product.Services";
+import { useQuery } from '@tanstack/react-query';
 
 const HomePage = () => {
-  const arr=['Nuoc hoa nam',' nuoc hoa nu','Laptop'];
+  const arr=['Nuoc hoa nam',' nuoc hoa nu','Laptop','OK']; 
+
+  const fetchProductAll= async () =>{
+   const res= await Product.getAllProduct();
+   return res;
+  }
+
+  const { isLoading, data: products } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchProductAll,
+    retry: 3,
+    retryDelay: 1000,
+  });
+  console.log(products)
+
+
   return (
    <>
         <div className="menu_item">
@@ -24,16 +40,22 @@ const HomePage = () => {
         <SliderComponent  arrImages={[slide1,slide2,slide3,slide4]} autoplay={true} />
         <div className='container'>
             <div className='card'>
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent /> 
-                <CardComponent />
-                <CardComponent />
+                {products?.data?.map((product) =>{
+                  return (
+                    <CardComponent 
+                          key={product.id} 
+                          countInStock={product.countInStock}
+                          description={product.description}
+                          image={product.image} 
+                          name={product.name}
+                          price={product.price}
+                          type={product.type}
+                          selled={product.selled}
+                          disCount={product.disCount}
+                    />
+                  )
+                })}
+
 
             </div>
             <div className='button_homePage'>

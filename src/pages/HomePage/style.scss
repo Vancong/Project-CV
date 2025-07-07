@@ -1,5 +1,3 @@
-@use "sass:map";
-@import "../../style/pages/thems.scss";
 
 
 .menu_item{
@@ -19,7 +17,7 @@
     margin-top: 20px;
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
     flex-wrap: wrap;
 
 }

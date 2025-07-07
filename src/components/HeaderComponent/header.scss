@@ -9,6 +9,7 @@
     
 }
 .user {
+    cursor: pointer;
     display: flex;
     align-items: cennter;
     gap:10px;
@@ -19,3 +20,17 @@
     }
 }
 
+.contentPopup{
+    cursor: pointer;
+    &:hover {
+        background-color: red;
+        color: white;
+    }
+}
+
+.avt-header {
+    height:30px;;
+    width:30px;
+    border-radius:50%;
+    object-fit:cover;
+}
