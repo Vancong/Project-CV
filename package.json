@@ -25,6 +25,7 @@
     "scss": "^0.2.4",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.17",
+    "sweetalert": "^2.1.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -52,5 +53,4 @@
     ]
   },
   "proxy": "http://localhost:3001"
-
 }

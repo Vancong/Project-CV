@@ -12,7 +12,7 @@ import * as UserService from "../../services/User.Service"
 import { resetUser } from '../../redux/slices/UserSlice'
 
 
-const HeaderCompoent = () => {
+const HeaderCompoent = ({isHiddenFavorite=false,isHiddenCart=false,isHiddenSearch=false}) => {
   const user=useSelector((state)=> state.user)
   const dispatch=useDispatch();
   const [userName,setUserName]=useState('');
@@ -37,7 +37,9 @@ const HeaderCompoent = () => {
 
   const content= (
     <div>
-    
+      {user.isAdmin&& 
+        <p className='contentPopup' onClick={()=>navigate('/admin/dashboard')}>Quản lý hệ thống</p>
+      } 
       <p className='contentPopup' onClick={()=>navigate('/profile-user')}>Thông tin người dùng </p>
       <p className='contentPopup' onClick={handleLogout}>Đăng xuất </p>
     </div>
@@ -46,11 +48,14 @@ const HeaderCompoent = () => {
   
 return (
     <div className='ok'>
-        <div className='header_top container'>
+        <div className='header_top container' 
+            style={{justifyContent: isHiddenSearch&& isHiddenFavorite ?'space-between': 'unset'}}
+        >
           <Col span={6}>
              <WrapperTextHeader>VanCong88</WrapperTextHeader>
           </Col>
-          <Col span={12}>
+          {!isHiddenSearch&&(
+            <Col span={12}>
               <ButtonInputSearch className="serach_header"
                 placeholder="Vui lòng nhập tên sản phẩm để tìm kiếm"
                 allowClear
@@ -58,15 +63,21 @@ return (
                 onSearch
                 textButton="Tìm Kiếm"
               />
-          </Col>
+            </Col>
+          )}
+         
           <Col span={6}>
            
             <div className='user'>
                 <div style={ {fontSize:"28px"}}>   
-                    <HeartOutlined style={{margin:" 0 10px"}} />
-                    <Badge count={4} size='small' >
-                      <ShoppingCartOutlined style={{fontSize:'31px'}} />
-                    </Badge>
+                   {!isHiddenFavorite&&(
+                      <HeartOutlined style={{margin:" 0 10px"}} />
+                   )}
+                   {!isHiddenCart&& (
+                      <Badge count={4} size='small' >
+                        <ShoppingCartOutlined style={{fontSize:'31px'}} />
+                      </Badge>
+                   )}
                 </div>
             
                 

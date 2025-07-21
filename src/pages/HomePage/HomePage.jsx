@@ -26,7 +26,7 @@ const HomePage = () => {
     retry: 3,
     retryDelay: 1000,
   });
-  console.log(products)
+
 
 
   return (
