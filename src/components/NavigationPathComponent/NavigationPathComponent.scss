@@ -1,0 +1,20 @@
+.navigation_path {
+  margin: 30px 0;
+  color: #00000063;
+  font-size: 20px;
+
+  span {
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  span:hover {
+    color: #0a4f58;
+  }
+
+  .active {
+    color: #333;
+    cursor: default;
+  }
+
+}

@@ -1,0 +1,36 @@
+.product-tab-content p {
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 2.5;
+  color: #333;
+}
+
+.ant-tabs-tab {
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 16px !important;
+  transition: all 0.3s;
+
+  &:hover {
+    color: #444444 !important;
+    text-decoration: none;
+  }
+}
+.ant-tabs-nav .ant-tabs-tab {
+  color: #999999;
+  font-size: 20px;
+}
+
+
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #000000 !important;
+  font-weight: 500;
+}
+
+
+.ant-tabs-ink-bar {
+  background: #000000 !important;
+  height: 2px;
+  border-radius: 1px;
+}
