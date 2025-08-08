@@ -1,15 +1,17 @@
   import React, { Fragment, useEffect, useState } from 'react'
-  import {BrowserRouter as Router, Routes,Route, Navigate} from "react-router-dom";
+  import {BrowserRouter as Router, Routes,Route, Navigate, data} from "react-router-dom";
   import { routes } from './routes';
   import DefaultComponent from './components/DefaultComponent/DefaultComponent';
-  import{isJsonString} from "./utils/validate";
   import { jwtDecode } from 'jwt-decode';
   import { useDispatch, useSelector } from 'react-redux';
   import { updateUser } from './redux/slices/UserSlice';
   import *as UserService  from "./services/User.Service";
   import LoadingComponent from './components/LoadingComponent/LoadingComponent';
-
-
+  import *as CartService from './services/Cart.Service';
+  import { setCart } from './redux/slices/CartSlice'; 
+  import { setFavoriteIds } from './redux/slices/FavoriteSlice';
+  import *as FavoriteService from "./services/Favorite.Service.js";
+  
   export function App() { 
     const dispatch=useDispatch();
     const user=useSelector((state =>state.user));
@@ -17,11 +19,13 @@
 
     useEffect(() => {
 
-      const handlGetUser= async () =>{
+      const handlGetUserAndCart= async () =>{
           const  {decode,storeData}=handleDecode()|| {};
             try {
               if (decode?.id) {
                 await handlGetDetailUser(decode.id, storeData);
+                await  handlDetailCart(decode.id, storeData);
+                await handleGetUserFavorites(decode.id,storeData)
               }     
                 
             } catch (error) {
@@ -32,25 +36,33 @@
             }
 
       }
-      handlGetUser();
+      handlGetUserAndCart()
 
     },[])
 
-    const handleDecode=  ()  =>{
-      let storeData=localStorage.getItem('access_token')
-      let decode ={};
-      if(storeData && isJsonString(storeData)) {
-        storeData=JSON.parse(storeData);
-        try {
-          decode = jwtDecode(storeData);
-        } 
-        catch (err) {
-          console.log('Token không hợp lệ hoặc hết hạn:', err);
-          
-        }
-        return {decode,storeData};
-      }
+    const handlDetailCart= async(id,access_token) =>{
+      const res= await CartService.getDetail(id,access_token);
+      const items=[...res.data];
+      dispatch(setCart({items,total:res.total}))
     }
+    
+    const handleGetUserFavorites= async(id,access_token) =>{
+      const res= await FavoriteService.getUserFavorite(id,access_token);
+      const listId= res?.data?.map((item) =>item._id)
+      dispatch(setFavoriteIds({total: res.total,productIds: listId}));
+    }
+
+    const handleDecode = () => {
+      let storeData = localStorage.getItem('access_token');
+      if (!storeData) return {};
+      try {
+        const decode = jwtDecode(storeData);
+        return { decode, storeData };
+      } catch (err) {
+        console.log('Token không hợp lệ hoặc hết hạn:', err);
+        return {};
+      }
+    };
 
     const handlGetDetailUser= async (id,access_token) =>{
       const res= await UserService.getDetailUser(id,access_token);
@@ -58,30 +70,6 @@
 
     }
 
-
-    UserService.axiosJwt.interceptors.request.use(async (config) => {
-      let { decode, storeData } = handleDecode() || {};
-      const currentTime = new Date();
-      if (decode?.exp < currentTime.getTime() / 1000) {
-        try {
-          const data = await UserService.refreshToken();
-          if (data?.access_token) {
-            localStorage.setItem('access_token', JSON.stringify(data.access_token));
-            config.headers['token'] = `Bearer ${data.access_token}`;
-          }
-        } catch (error) {
-          console.error( error);
-        }
-      } else {
-        if (storeData) {
-          config.headers['token'] = `Bearer ${storeData}`;
-        }
-      }
-        return config;
-      },
-       (error) => {
-        return Promise.reject(error);
-      });
 
 
     if (isLoading) {

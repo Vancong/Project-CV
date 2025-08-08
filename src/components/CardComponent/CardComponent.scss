@@ -11,6 +11,9 @@
     font-weight: 500;
     // margin-top: 70px;
 
+    .ant-card-cover {
+        position: relative;
+    }
     .selled-product {
         position: absolute;
         top:15px;
@@ -18,19 +21,25 @@
         color: white;
         background-color: #FF0000;
         padding: 0 10px;
-        z-index: 1;
+        z-index: 10;
         line-height: 1.6;
         font-size: 15px;
         border-radius: 16px;
     }
-    .icon_love:hover {
-    
-        stroke: red;
+
+    .icon_love:hover path {
+          fill: #e30613;
     }
+
+    .icon_love.active path {
+        fill: #e30613;
+    }
+
     .icon_love {
         position: absolute;
         top:15px;
         right: 15px;
+          border: 1.6px solid transparent;
 
     }
 
@@ -60,7 +69,7 @@
             cursor: pointer;
             margin: 0 15px;
             padding: 0 10px;
-            min-width: 90px;
+            min-width: 100px;
         }
         .icon_buy,.icon_detail {
             height: 40px;
@@ -94,7 +103,7 @@
         left: 50%;
         transform: translatex(-50%);
         width: 40px;
-        border: .719614px solid #D0D5DF;
+        border: 1px solid #D0D5DF;
     }
 
     .product_description{

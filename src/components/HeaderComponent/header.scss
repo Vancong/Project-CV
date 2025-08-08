@@ -1,12 +1,19 @@
 @use "sass:map";
 @import "../../style/pages/all.scss";
 
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: white;
+}
 .header_top{
     display: flex;
-    padding-top: 20px;
+    margin: 0 120px;
+    padding-top: 30px;
+    padding-bottom: 20px;
     align-items: center;    
-    background: rgb(255 255 255 / 73%);
-    
+
 }
 .user {
     cursor: pointer;
@@ -33,4 +40,45 @@
     width:30px;
     border-radius:50%;
     object-fit:cover;
+}
+
+.menu_item {
+    display: flex;
+    justify-content: center;
+    padding: 35px 0;
+    list-style: none;
+    margin: 0;
+    color: #0a4f58;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+
+}
+
+.menu_item_li {
+    position: relative;
+    cursor: pointer;
+    padding: 12px 4px;
+    transition: color 0.2s ease;
+    font-size: 16px;
+}
+
+.menu_item_li::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 24px);
+    height: 2px;
+    transition: width 0.3s ease;
+}
+
+.menu_item_li:hover::after {
+    background-color: #0a4f58;
+}
+
+.menu_item_li.active::after {
+     background-color: #0a4f58;
 }

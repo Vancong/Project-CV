@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import TypeProduct from '../../components/TypeProduct/TypeProduct'
 import "./style.scss";
 import SliderComponent from '../../components/SliderComponent/SliderComponent';
@@ -7,51 +7,58 @@ import slide2 from "../../assets/images/slide2.webp";
 import slide3 from "../../assets/images/slide3.webp";
 import slide4 from "../../assets/images/slide4.webp";
 import CardComponent from '../../components/CardComponent/CardComponent';
-import NavbarComponent from '../../components/NavbarComponent/NavbarComponent';
+import NavbarComponent from '../../components/FilterSidebarComponent/FilterSidebarComponent';
 import ButtonCompoent from '../../components/ButtonComponent/ButtonComponent';
 import *as Product from "../../services/Product.Services";
 import { useQuery } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
+import LoadingComponent from "../../components/LoadingComponent/LoadingComponent"
 
 const HomePage = () => {
-  const arr=['Nuoc hoa nam',' nuoc hoa nu','Laptop','OK']; 
-
-  const fetchProductAll= async () =>{
-   const res= await Product.getAllProduct();
-   return res;
+  const searchProduct = useSelector(state => state.product.search);
+  const [limit,setLimit]=useState(4); 
+  const fetchProductAll= async (context) =>{
+    const {limit,searchProduct: search}=context;
+    const res= await Product.getAllProduct({search,limit});
+    return res;
   }
 
-  const { isLoading, data: products } = useQuery({
-    queryKey: ['products'],
-    queryFn: fetchProductAll,
+
+
+  const { isLoading, data: products,isPreviousData } = useQuery({
+    queryKey: ['products',{searchProduct,limit}],
+    queryFn: ({ queryKey }) => {
+      const [, context] = queryKey;
+      return fetchProductAll(context); 
+    },
     retry: 3,
     retryDelay: 1000,
+    keepPreviousData: true
   });
-
 
 
   return (
    <>
-        <div className="menu_item">
-          {arr.map( (product,index) =>{
-            return <TypeProduct name={product} key={index} />
-          })}
-        </div>
+     <LoadingComponent isPending={isLoading}>
 
-        <SliderComponent  arrImages={[slide1,slide2,slide3,slide4]} autoplay={true} />
+        <SliderComponent type='banner' arrImages={[slide1,slide2,slide3,slide4]} autoplay={true} />
         <div className='container'>
             <div className='card'>
                 {products?.data?.map((product) =>{
                   return (
                     <CardComponent 
-                          key={product.id} 
+                          key={product._id} 
                           countInStock={product.countInStock}
                           description={product.description}
-                          image={product.image} 
+                          images={product.images} 
                           name={product.name}
-                          price={product.price}
+                          sizes={product.sizes}
                           type={product.type}
                           selled={product.selled}
                           disCount={product.disCount}
+                          slug={product.slug}
+                          id={product.id}
+                          product={product}
                     />
                   )
                 })}
@@ -60,14 +67,17 @@ const HomePage = () => {
             </div>
             <div className='button_homePage'>
                <ButtonCompoent className="color-main button_hover"
-                            textButton="Xem thêm" 
+                            textButton={isPreviousData ? "Đang tải..." : "Xem thêm"}
                             type="outline" 
                             styleTextButton={{fontWeight: 500}}
-                            styleButton={{border: "1px solid",height:"38px" ,width:"120px"}} />
+                            styleButton={{border: "1px solid",height:"38px" ,width:"120px"}} 
+                            onClick={ () => setLimit(pre => pre+4)}
+                            disabled={products?.total === products?.data?.length}
+               />
             </div>
           </div>
         homepage
-
+     </LoadingComponent>
    </>
   )
 }

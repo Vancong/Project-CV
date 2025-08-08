@@ -1,12 +1,17 @@
 import React from 'react'
 import ProductDetailsCompoent from '../../components/ProductDetailsCompoent/ProductDetailsCompoent'
-
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import NavigationPathComponent from '../../components/NavigationPathComponent/NavigationPathComponent'
 
 const ProductDetailPage = () => {
+  const {slug}=useParams();
+  const location=useLocation();
+  const {state}=location;
+  const navigate=useNavigate()
   return (
     <div className='container'>
-        <h4>Trang chủ</h4>
-        <ProductDetailsCompoent />
+        <NavigationPathComponent slugCt={state?.slugCt} category={state?.category} product={state?.product} />
+        <ProductDetailsCompoent slug={slug} />
     </div>
   )
 }

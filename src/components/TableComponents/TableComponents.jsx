@@ -1,13 +1,13 @@
 import {Table } from 'antd'
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
-import { SettingOutlined,DownOutlined} from '@ant-design/icons';
 import { useState } from 'react';
+
 const TableComponents = (props) => {
 
   const {selectionType= 'checkbox',data=[],columns=[],isLoading=false,
   handleDeleteManyProduct=false,handleDeleteManyUser=false}=props;
   const [rowSelectedKeys,setRowSelectedKeys]=useState([]);
-
+  
   const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
       setRowSelectedKeys(selectedRowKeys);
@@ -20,13 +20,16 @@ const TableComponents = (props) => {
   const handleDeleteAll=() =>{
     if(handleDeleteManyProduct){
       handleDeleteManyProduct(rowSelectedKeys);
-      setRowSelectedKeys(0);
+      setRowSelectedKeys([]);
     }
     if(handleDeleteManyUser) {
       handleDeleteManyUser(rowSelectedKeys);
-       setRowSelectedKeys(0);
+       setRowSelectedKeys([]);
     }
   }
+  
+
+  
   return (
     <LoadingComponent isPending={isLoading}>
 
@@ -44,13 +47,12 @@ const TableComponents = (props) => {
           Xóa
         </div>
       )}
-
-          <Table 
-              rowSelection={{ type: selectionType, ...rowSelection }}
-              columns={columns}
-              dataSource={data}
-              {...props}
-          />
+      <Table 
+            rowSelection={{ type: selectionType, ...rowSelection }}
+            columns={columns}
+            dataSource={data}
+            {...props}
+        />
     </LoadingComponent>
   )
 }

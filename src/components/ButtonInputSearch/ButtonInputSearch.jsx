@@ -1,22 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {SearchOutlined } from '@ant-design/icons';
 import InputComponent from '../InputComponent/InputComponent';
 import ButtonComponent from '../ButtonComponent/ButtonComponent';
+
 const ButtonInputSearch = (props) => {
 
   const {size,placeholder,textButton,bgrColorInput ="#fff",bgrColorButton="#fff",
-    textColorButton="#000000",onChangeSearch,onClickSearch}=props;
+    textColorButton="#000000",onClickSearch,onChangeSearch,value}=props;
+
+  const handleChange = (e) => {
+    if (onChangeSearch) {
+        onChangeSearch(e); 
+    }
+
+  };
+
+  const handleSearch = () => {
+    if (onClickSearch) {
+      onClickSearch(value);
+    }
+  };
   return (
     <div style={{display:"flex"}}>
         <InputComponent 
             size= {size} 
             placeholder={placeholder} 
             style={{ background: bgrColorInput, width: 350}} 
-            onChange={onChangeSearch}
+            onChange={handleChange}
+            value={value}
             onKeyDown={(e) => {
               if (e.key === "Enter" && onClickSearch) {
-                onClickSearch()
+                handleSearch()
               }
             }}
         />
@@ -26,7 +41,7 @@ const ButtonInputSearch = (props) => {
             styleButton={{background: bgrColorButton}}
             textButton={textButton}
             styleTextButton={{color:textColorButton}}
-            onClick={onClickSearch}
+            onClick={handleSearch}
             >
         </ButtonComponent>
     </div>

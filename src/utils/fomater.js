@@ -5,4 +5,5 @@ export const Fomater = (number) => {
             currency: "VND"
         }
     ).format(number);
+
 }

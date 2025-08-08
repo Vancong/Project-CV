@@ -1,6 +1,5 @@
 import HomePage from "../pages/HomePage/HomePage"
 import NotFoudPage from "../pages/NotFoudPage/NotFoudPage"
-import OrderPage from "../pages/OrderPage/OrderPage"
 import ProductDetailPage from "../pages/ProductDetailPage/ProductDetailPage"
 import ProductsPage from "../pages/ProductsPage/ProductsPage"
 import SigninPage from "../pages/SigninPage/SigninPage"
@@ -8,6 +7,10 @@ import SignUpPage from "../pages/SignUpPage/SignUpPage"
 import TypeProductsPage from "../pages/TypeProductsPage/TypeProductsPage"
 import ProfilePage from "../pages/ProfilePage/ProfilePage"
 import AdminPage from "../pages/AdminPage/AdminPage"
+import CartPage from "../pages/CartPage/CartPage"
+import CheckoutPage from "../pages/CheckoutPage/CheckoutPage"
+import MyOrderPage from "../pages/MyOrderPage/MyOrderPage"
+import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage"
 
  export const routes= [
     {
@@ -16,17 +19,35 @@ import AdminPage from "../pages/AdminPage/AdminPage"
         isShowHeader: true
     },
     {
-        path: "/order",
-        page: OrderPage,
+        path: "/checkout",
+        page: CheckoutPage,
         isShowHeader: true
     },
+    {
+        path: "/cart",
+        page: CartPage,
+        isShowHeader: true
+    },
+
+    {
+        path: "/my-order",
+        page: MyOrderPage,
+        isShowHeader: true
+    },
+
+    {
+        path: "/my-order/detail/:orderCode",
+        page: OrderDetailPage,
+        isShowHeader: true
+    },
+
     {
         path: "/product",
         page: ProductsPage,
         isShowHeader: true
     },
     {
-        path: "/:type",
+        path: "/type/:type",
         page: TypeProductsPage,
         isShowHeader: true
     },
@@ -41,7 +62,7 @@ import AdminPage from "../pages/AdminPage/AdminPage"
         isShowHeader: false
     },
      {
-        path: "/product-details",
+        path: "/product-details/:slug",
         page: ProductDetailPage,
         isShowHeader: true
     },

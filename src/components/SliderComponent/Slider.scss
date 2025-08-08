@@ -1,5 +1,7 @@
 
-
+img {
+    object-fit: cover;
+}
 .slick-prev{
     position: absolute;
     top: 50%;
@@ -20,3 +22,6 @@
     z-index: 2;
 }
 
+.click_img {
+    cursor: pointer;
+}

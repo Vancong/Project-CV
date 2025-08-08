@@ -6,10 +6,12 @@ const ButtonComponent = ({size,icon=null,styleButton,styleTextButton,textButton,
 
             style={{
               ...styleButton,
-              background: disabled ? '#ccc' : styleButton.background
+              background: disabled ? '#ccc' : styleButton.background,
+              cursor: disabled ? 'not-allowed' : 'pointer'
             }}
             size= {size}
             icon={icon}  
+            disabled={disabled}
       
             {...rest}
             >

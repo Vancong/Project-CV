@@ -10,7 +10,7 @@
     }
 
     .price_productDetail {
-        font-weight: 400;
+        font-weight: 500;
         font-size: 20px;
         line-height: 32px;
         color: #000;
@@ -28,37 +28,81 @@
         }
     }
 
-    .capacityList{
+    .sizes{
         margin-top: 20px;
         display: flex;
 
-        .capacity {
-            padding: 10px 10px;
-            margin-right: 10px;
-            min-width: 70px;
-            font-weight: 400;
-            border: 1px solid #bcb4b4;
-            color: #000;
+        .size {
+            padding: 10px;
+            border: 1px solid #ccc;
             cursor: pointer;
-            border-radius: 5px;
-
+            margin-right: 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
             &:hover{
                 border: 3px solid #201e1e;
             }
-         }
+        }
+
+        .size.active {
+            background-color: #000;
+            color: #fff;
+            border-color: #000;
+        }
     }
 }
+
 
 .quantity {
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: 500;
 
-    input {
-        width: 28px;
-        height: 28px;
+  div:first-child {
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  div:last-child {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .minus,
+  .plus {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #ddd;
     }
+  }
 
-    
+  .quantity_text {
+    width: 70px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+
+    &:focus {
+      border-color: #000;
+    }
+  }
 }
+
 
 .btn-shopping{
     width: 540px;
@@ -78,11 +122,21 @@
 
 .btn-icon {
     width: 530px;
-
-    button:hover{
-        color: #e30613;
-        background-color: #bcb4b4   ;
+    button {
+        &:hover {
+            color: #e30613 !important;       
+            border-color: #e30613 !important; 
+            background-color: #ccc !important;
+        }
+   
     }
-    
+}
+
+.btn-icon.active {
+    button {
+        color: #e30613 !important;       
+        border-color: #e30613 !important; 
+        background-color: #ccc !important;
+    }
 }
 

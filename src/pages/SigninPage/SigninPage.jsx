@@ -2,7 +2,7 @@
 import InputFormComponent from '../../components/InputFormComponent/InputFormComponent'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import "./SiginPgae.scss"
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import * as UserService from '../../services/User.Service';
 import { useMutationHook } from '../../hooks/useMutationHook'
@@ -10,9 +10,14 @@ import LoadingComponent from '../../components/LoadingComponent/LoadingComponent
 import { jwtDecode } from 'jwt-decode';
 import {useDispatch} from 'react-redux'
 import { updateUser } from '../../redux/slices/UserSlice'
+import { setCart } from '../../redux/slices/CartSlice'
+import *as CartService from "../../services/Cart.Service";
+import *as FavoriteService from "../../services/Favorite.Service"
+import { setFavoriteIds } from '../../redux/slices/FavoriteSlice'
 const SigninPage = () => {
   const [email,setEmail] =useState('');
   const [password,setPasswrod]=useState('');
+  const location=useLocation();
   const dispatch=useDispatch();
 
   const navigate= useNavigate();
@@ -27,17 +32,46 @@ const SigninPage = () => {
   const {data,isPending,isSuccess}= mutation;
 
   useEffect (() => {
-    if(isSuccess&&data.status==='OK'){
-      localStorage.setItem('access_token',JSON.stringify(data?.access_token))
-      if(data?.access_token) {
-        const decode= jwtDecode(data?.access_token);
-        if(decode?.id) {
-          handlGetDetailUser(decode.id,data?.access_token)
+
+    const handleLogin=async () =>{
+        if(isSuccess&&data.status==='OK'){
+          localStorage.setItem('access_token',JSON.stringify(data?.access_token))
+          if(data?.access_token) {
+            const decode= jwtDecode(data?.access_token);
+            if(decode?.id) {
+  
+              await handlGetDetailUser(decode.id,data?.access_token)
+              await handlDetailCart(decode.id,data?.access_token)
+              await handleGetUserFavorites(decode.id,data.access_token)
+            }
+          }
+
+          if(location.state) {
+            navigate(location?.state)
+          }
+          else {
+            navigate('/')
+          }
         }
-      }
-      navigate('/')
     }
+    handleLogin();
+
   },[isSuccess])
+
+  
+  const handleGetUserFavorites= async(id,access_token) => {
+        const res= await FavoriteService.getUserFavorite(id,access_token);
+  
+        dispatch(setFavoriteIds({total: res.total,productIds: res.data}));
+      
+  }
+
+  const handlDetailCart = async (id, access_token) => {
+    const res = await CartService.getDetail(id, access_token);
+    const items = [...res.data||[]];
+    console.log(res?.data)
+    dispatch(setCart({ items, total: res?.total||0 }));
+  };
 
   const handlGetDetailUser= async (id,access_token) =>{
     const res= await UserService.getDetailUser(id,access_token);
@@ -59,7 +93,6 @@ const SigninPage = () => {
       email,
       password
     })
-
   }
 
   return (

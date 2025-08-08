@@ -1,9 +1,21 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
+import slugify from 'slugify';
 
-const TypeProduct = ({name}) => {
- 
+
+const TypeProduct = ({name,onClick}) => {
+
+  const navigate=useNavigate();
+  const handleNatvigateType=(type) =>{
+    const slug = slugify(type, { lower: true });
+    if(slug==='trang-chu') {
+      navigate('/');
+      return;
+    }
+    navigate(`/type/${slug}`,{state: type})
+  }
   return (
-    <div >  {name}</div>
+    <div style={{cursor:'pointer',padding:'10px 0px'}} onClick={() =>handleNatvigateType(name)}>  {name}</div>
   )
 }
 

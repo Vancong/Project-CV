@@ -69,6 +69,8 @@ const ProfilePage = () => {
 
   const mutation = useMutationHook(async ({id,dataUser,access_token}) => {
       const res = await UserService.updateUser(id, dataUser, access_token);
+
+     
       dispatch(updateUser({ access_token, ...res.user }));
       return res;
   });
