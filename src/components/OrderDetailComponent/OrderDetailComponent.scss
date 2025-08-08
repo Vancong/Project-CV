@@ -1,0 +1,153 @@
+.order_detail {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .order_info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+
+    .left, .right {
+      flex: 1;
+    }
+
+     .status_badge {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #fff;
+        text-align: center;
+        min-width: 120px;
+    }
+
+    .pending {
+        background-color: #f59e0b; 
+    }
+
+    .confirmed {
+        background-color: #10b981; 
+    }
+
+    .shipping{
+        background-color: #3b82f6;
+    }
+
+    .cancelled {
+        background-color: #ef4444; 
+    }
+
+
+    .payment_method {
+      background-color: #f59e0b;
+      padding: 8px 14px;
+      color: white;
+      border-radius: 20px;
+      display: inline-block;
+      text-align: center;
+      min-width: 80px;
+    }
+   }
+
+    table {
+        width: 100%;
+        font-size: 15px;
+        background-color: #fff;
+    }
+
+    thead {
+        background-color: #f5f7fa;
+    }
+
+    th, td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    th {
+        color: #333;
+        font-weight: 600;
+    }
+
+    td {
+        color: #555;
+    }
+
+  .total_summary {
+    max-width: 300px;
+    margin-left: auto;
+    margin-top: 30px;
+    color: #555;
+
+    h2{
+      font-weight: 550;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+
+      .price {
+        color: #333;
+        font-weight: 550;
+      }
+      &.total {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+      }
+    }
+  }
+
+  .btn_action {
+      border-top: 1px solid #eee;
+      margin-left: auto;
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: end;
+       min-height: 40px; 
+      padding-top:30px;
+      gap: 10px;
+      .btn {
+        cursor: pointer;
+        width: 150px;
+        height: 40px;
+        padding: 8px 24px;
+        color: white;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+
+      .cancel{
+        background-color: #ef4444;
+      }
+      .contact {
+        background-color: #3B82F6;
+      }
+
+      .btn.cancel.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+  }
+
+}

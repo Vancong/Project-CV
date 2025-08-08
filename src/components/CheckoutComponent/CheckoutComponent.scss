@@ -1,0 +1,133 @@
+.checkout_page {
+  display: flex;
+  gap: 30px;
+  padding: 40px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  h2 {
+    font-size: 26px;
+    color: #333333;
+    font-weight: 700;
+  }
+  
+    .checkout_left,.checkout_middle,.checkout_right {
+        flex: 1;
+        min-width: 300px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    .checkout_left input,.checkout_left select,.checkout_left textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+    }
+
+    
+    .order_summary_table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+    .order_summary_table tr {
+      border-bottom: 1px solid #ddd;
+      height: 65px;
+    }
+
+
+
+    .order_summary_table th,
+    .order_summary_table td {
+      padding: 10px 0;
+    }
+
+    .order_summary_table input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .order_summary_table button {
+      background-color: #333;
+      color: #fff;
+      padding: 8px 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .privacy_note {
+      font-size: 13px;
+      color: #777;
+      margin-top: 12px;
+    }
+
+    .order_btn {
+      margin: 20px 0;
+      width: 100%;
+      font-size: 18px;
+      padding: 18px;
+      background-color: #e30613;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 6px;
+      text-align: center;
+      cursor: pointer;
+
+      &:hover {
+            opacity: 0.8;
+      }
+    }
+
+    .cart_btn {
+        width: 100%;
+        text-align: center;
+        padding: 18px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 6px;
+        border:  1px solid #ccc;
+        cursor: pointer;
+        color: #6c6868;
+
+        &:hover {
+          background-color: #f2f2f2;
+        }
+    }
+}
+
+.error {
+  color: #f5222d; 
+  font-size: 13px;
+  margin-top: -6px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.input_error{
+  border: 1px solid #f5222d !important;
+}
+
+.payment_methods {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.payment_methods label {
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.payment_methods input[type="radio"] {
+  margin-right: 8px;
+}
