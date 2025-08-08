@@ -24,7 +24,7 @@ export const createNote = async (data,access_token) => {
 
 // };
 
-export const getAllNote= async (page,limit,search) => {
+export const  getAllNote= async (page,limit,search) => {
 
   const res = await axios.get(`${process.env.REACT_APP_API_URL}/note/get-all`, 
     {
