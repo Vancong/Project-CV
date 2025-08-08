@@ -1,0 +1,90 @@
+.filter_sidebar {
+  width: 95%;
+  background: #fff;
+  border-radius: 8px;
+  h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+
+  .filter_group {
+
+    padding: 20px 0;
+
+    h4 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .filter_options {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+
+      .filter_item {
+        padding: 8px 8px;
+        background-color: #eeeeee;
+        border: 1px solid #eeeeee;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: #0a4f58;
+          border-color: #0a4f58;
+          color: #fff;
+        }
+
+        &.active {
+          background-color:#0a4f58;
+          color: #fff;
+          border-color: #0a4f58;
+        }
+      }
+    }
+    .brand_scroll {
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+  }
+  .filter_group + .filter_group {
+    border-top: 1px solid #999;
+  }
+  .filter_group:last-child {
+    border-bottom: 1px solid #999;
+  }
+
+}
+
+
+.filter_buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  .filter_btn,
+  .clear_btn {
+    padding: 8px;
+    font-size: 15px;
+    min-width: 100px;
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+  }
+
+  .filter_btn {
+    background-color: #0a4f58;
+    color: white;
+  }
+
+  .clear_btn {
+    margin-right: 20px;
+    background-color: #dc3545;
+    color: white;
+  }
+}

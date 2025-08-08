@@ -1,0 +1,49 @@
+
+
+
+.mega_menu {
+  background-color: #c4cfda;
+  padding: 16px 24px;
+  min-width: 600px;
+  max-width: 800px;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 4px;
+
+    ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+        margin: 0;
+        gap: 8px;
+    }
+
+
+    ul li {
+        width: calc(33.33% - 8px);
+        padding: 6px 8px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+        font-size: 16px;
+
+        &:hover {
+            background-color: #fff;
+        }
+    }
+    
+}
+
+.menu_title {
+    display: flex; 
+    gap:5px; 
+}
+
+.arrow_icon {
+    font-size: 12px;
+}
+
+.menu_title.open .arrow_icon {
+   transform: rotate(180deg);
+}
