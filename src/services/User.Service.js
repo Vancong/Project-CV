@@ -1,7 +1,5 @@
 import axios from "axios"
-
-
-export const axiosJwt=axios.create();
+import axiosJwt from "./axiosJwt";
 
 export const loginUser = async (data) => {
    try {
@@ -11,7 +9,6 @@ export const loginUser = async (data) => {
     
   } catch (error) {
     const errResponse = error?.response?.data;
-
     return {
       status: 'ERR',
       message: errResponse?.message 
@@ -27,12 +24,9 @@ export const signUpUser = async (data) => {
     return res.data;
     
   } catch (error) {
-    const errResponse = error?.response?.data;
-    console.error("Lỗi API:", error?.response || error);
-    return {
-      status: 'ERR',
-      message: errResponse?.message 
-    };
+     const errResponse = error?.response?.data;
+     throw new Error(errResponse?.message || 'Lỗi khi tạo người dùng');
+   
   }
 };
 
@@ -50,14 +44,13 @@ export const getDetailUser = async (id,access_token) => {
 
 export const getAlllUser = async (page,limit,search,access_token) => {
 
-  const res = await axiosJwt.get(`${process.env.REACT_APP_API_URL}/user/getAll`, 
-    {
-       params: { page, limit ,search}
-    },{
+  const res = await axiosJwt.get(`${process.env.REACT_APP_API_URL}/user/getAll`,{
+    params: { page, limit ,search},
     headers:{
       token:`Bearer ${access_token}`,
     }
   });
+
   return res.data;
 
 };
@@ -81,12 +74,17 @@ export const logoutUser=async () => {
 };
 
 export const updateUser=async (id,dataUser,access_token) => {
-  const res = await axiosJwt.put(`${process.env.REACT_APP_API_URL}/user/update-user/${id}`,dataUser,{
-      headers:{
-      token:`Bearer ${access_token}`,
-    }
-  });
-  return res.data;
+  try {
+    const res = await axiosJwt.put(`${process.env.REACT_APP_API_URL}/user/update-user/${id}`,dataUser,{
+        headers:{
+        token:`Bearer ${access_token}`,
+      }
+    });
+    return res.data;
+  } catch (error) {
+       const errResponse = error?.response?.data;
+       throw new Error(errResponse?.message || 'Lỗi cập nhật người dùng');
+  }
 
 
 };

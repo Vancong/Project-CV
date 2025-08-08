@@ -10,11 +10,9 @@ import "./AdminProduct.scss"
 import { useQuery,useQueryClient } from '@tanstack/react-query';
 import DrawerComponent from '../DrawerComponent/DrawerComponent';
 import { useSelector } from 'react-redux';
-import ProductFormComponent from "../ProductFormComponent/ProductFormComponent"
+import ProductFormComponent from "../FormAdmin/ProductFormComponent/ProductFormComponent"
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch"
-import { data } from 'react-router-dom';
-
-
+import {getProductTableColumns} from "./ProductTableColumns";
 
 const AdminProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +24,7 @@ const AdminProduct = () => {
   const [fileListUpdate, setFileListUpdate] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const limit=2;
+  const limit=6;
 
   const [inputSearch, setInputSearch] = useState('');
   const [searchText, setSearchText] = useState('');
@@ -45,14 +43,7 @@ const AdminProduct = () => {
   const [formCreate] = Form.useForm();
   const [formUpdate] = Form.useForm();
 
-  useEffect(() => {
-    if (isModalOpen) {
-      formCreate.setFieldsValue({
-        sizes: [{ volume: '', price: '', countInStock: '' }]
-      });
-      setFileListCreate([]); 
-    }
-  }, [isModalOpen]);
+
 
 
   const handleCancel = () => {
@@ -62,15 +53,10 @@ const AdminProduct = () => {
   };
 
 
-  const getAllProduct = async (page = 1, limit = 10,search = '') => {
-    const res = await ProductService.getAllProduct( page, limit ,search);
-    return res;
-  };
-
   
   const { isLoading:isLoadingProducts , data: products } = useQuery({
     queryKey: ['products', currentPage,searchText],
-    queryFn: () => ProductService.getAllProduct(currentPage, limit,searchText ),
+    queryFn: () => ProductService.getAllProduct({page:currentPage, limit, search:searchText }),
     keepPreviousData: true
   });
 
@@ -80,13 +66,20 @@ const AdminProduct = () => {
     setRowSelected(record?._id);
     try {
       const res = await ProductService.getDetailProduct(record?._id);
+
       if(res?.data){
         const product = res.data;
+ 
         setProductData(product);
         formUpdate.setFieldsValue({
           name: product.name,
           description: product.description,
-          brand: product.brand,
+          notes: {
+            top: product.notes?.top?.map(note => note._id) || [],
+            middle: product.notes?.middle?.map(note => note._id) || [],
+            base: product.notes?.base?.map(note => note._id) || [],
+          },
+          brand: product.brand._id,
           gender: product.gender,
           concentration: product.concentration,
           scentDuration: product.scentDuration,
@@ -114,18 +107,6 @@ const AdminProduct = () => {
     }
   };
 
-  const renderAcion= (_,record) =>{
-    return(
-      <div style={{fontSize:'20px'}}>
-        <EditOutlined  style={{color:'orange',cursor:'pointer',marginRight:'10px'}}
-                         onClick={()=> { handleDetailProduct(record)}}
-        />
-        <DeleteOutlined style={{color:'red',cursor:'pointer'}} 
-                        onClick={ () => handleDeleteProduct(record)}  
-        />
-      </div>
-    )
-  }
 
   const handleDeleteProduct = async (record) => {
     const confirm = await alertConfirm('Xác nhận xoá', `Bạn có chắc muốn xoá sản phẩm "${record.name}"?`);
@@ -134,6 +115,10 @@ const AdminProduct = () => {
      deleteProductMutation.mutate({ id: record._id, access_token: user?.access_token });
   };
 
+  const columns=getProductTableColumns({
+    onDetail: handleDetailProduct,
+    onDelete: handleDeleteProduct
+  })
 
   const deleteProductMutation = useMutationHook(async ({ id, access_token }) => {
     return await  ProductService.deleteProduct(id, access_token )
@@ -173,56 +158,18 @@ const AdminProduct = () => {
     }
   }, [isSuccessDeleteMany, isErrorDeleteMany]);
 
-
-
-  const columns = [
-    {
-      title: 'Tên sản phẩm',
-      dataIndex: 'name',
-      render: text => <a>{text}</a>,
-      sorter: (a,b) => a.name.length - b.name.length
-    },
-    {
-      title: 'Giá',
-      render: (_,record) =>{
-         if(record?.sizes.length>0) {
-          const price = record.sizes[0].price;
-          return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-         }
-      },
-      sorter: (a, b) => {
-        const priceA = a.sizes?.[0]?.price;
-        const priceB = b.sizes?.[0]?.price ;
-        return priceA - priceB;
-      }
-    },
-    {
-      title: 'Giới tính',
-      dataIndex: 'gender',
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: "isActive",
-      render: (isActive) => (
-        <Tag color={isActive ? 'green' : 'volcano'}>
-          {isActive ? 'Hoạt động' : 'Dừng họa động'}
-        </Tag>
-      )
-    },
-    {
-      title: 'Hành động',
-      dataIndex: 'action',
-      render:  (_, record) => renderAcion(_, record)  
-    },
-    
-  ];
+  const GENDER_LABELS = {
+    'Male': 'Nam',
+    'Female':'Nữ',
+    'Unisex': 'Unisex', 
+  };
+  const dataTable = (products?.data || []).map(product => ({ ...product, key: product._id,
+    brand: product.brand.name,
+    gender: GENDER_LABELS[product.gender]}));
   
-  const dataTable = (products?.data || []).map(product => ({ ...product, key: product._id }));
 
-
-
-  const mutationCreate = useMutationHook(async (formData) => {
-    return await ProductService.createProduct(formData);
+  const mutationCreate = useMutationHook(async ({data,access_token}) => {
+    return await ProductService.createProduct(data,access_token);
   });
 
   const { data: dataCreate, isSuccess: isSuccessCreate, isError: isErrorCreate, 
@@ -234,9 +181,8 @@ const AdminProduct = () => {
       alertSuccess("Thành công", "Tạo sản phẩm thành công");
       queryClient.invalidateQueries(['products']);
     }
-    if(isErrorCreate&&errorCreate?.response?.data?.status==='ERR'){
-
-      alertError("Thất bại",errorCreate.response.data.message);
+    if(isErrorCreate){
+      alertError("Thất bại", errorCreate?.message);
     }
   },[isSuccessCreate,isErrorCreate])
 
@@ -262,10 +208,8 @@ const AdminProduct = () => {
        queryClient.invalidateQueries(['products']);
        setIsOpenDrawer(false)
     }
-    if(isErrorUpdate&&errorUpdate?.response?.data?.status==='ERR'){
-
-      alertError("Thất bại",errorUpdate.response.data.message);
-      handleCancel();
+    if(isErrorUpdate){
+      alertError("Thất bại", errorUpdate?.message);
     }
   },[isSuccessUpdate,isErrorUpdate])
 
@@ -279,6 +223,7 @@ const AdminProduct = () => {
     formData.append('scentDuration', values.scentDuration);
     formData.append('discount', values.discount || 0);
     formData.append('sizes', JSON.stringify(values.sizes));
+    formData.append('notes',JSON.stringify(values.notes));
 
     fileList.forEach(file => {
       if (file.originFileObj) {
@@ -297,7 +242,10 @@ const AdminProduct = () => {
     return formData;
   };
 
-  
+
+
+
+
   const onCreateProduct = (values) => {
     if(fileListCreate.length===0) {
       setIsFormSubmit(true);
@@ -305,7 +253,7 @@ const AdminProduct = () => {
     }
     setIsFormSubmit(false)
     const formData=convertFormData(values,fileListCreate);
-    mutationCreate.mutate(formData);
+    mutationCreate.mutate({data:formData,access_token:user?.access_token});
   };
 
 
@@ -353,6 +301,7 @@ return (
             setFileList={setFileListCreate}
             isFormSubmit={isFormSubmit}
             isLoading={isPendingCreate}
+            mode='create'
             initialValues={{ sizes: [{ volume: '', price: '', countInStock: '' }] }}
           />
 
@@ -364,7 +313,7 @@ return (
           pagination={{
             current: currentPage,
             pageSize: limit,
-            total: (products?.totalPage || 1) * limit,
+            total: products?.total || 1,
             onChange: (page) => setCurrentPage(page),
             showSizeChanger: false,
           }}

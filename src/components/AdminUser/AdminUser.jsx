@@ -3,7 +3,7 @@ import "./AdminUser.scss"
 import { Button,Form,Modal,Tag } from 'antd';
 import { PlusOutlined,EditOutlined,DeleteOutlined} from '@ant-design/icons';
 import TableComponents from '../TableComponents/TableComponents';
-import UserFormComponent from "../UserFormComponent/UserFormComponent"
+import UserFormComponent from "../FormAdmin/UserFormComponent/UserFormComponent"
 import * as UserService from "../../services/User.Service" 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
@@ -24,7 +24,7 @@ const AdminUser = () => {
   const user=useSelector(state => state.user);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const limit=2;
+  const limit=8;
   const [inputSearch, setInputSearch] = useState('');
   const [searchText, setSearchText] = useState('');
 
@@ -83,7 +83,7 @@ const AdminUser = () => {
       deleteUserMutation.mutate({ id: record._id, access_token: user?.access_token });
   })
   const {isSuccess: isSuccessDelete,isError: isErrorDelete,
-    data: dataDelete,error: errorUpdate}= deleteUserMutation;
+    data: dataDelete,error: errorDelete}= deleteUserMutation;
 
   useEffect(()=>{
      if (isSuccessDelete && dataDelete?.status === 'OK') {
@@ -158,10 +158,10 @@ const AdminUser = () => {
   })
 
   const mutationCreate= useMutationHook(async(data) =>{
-    return await UserService.signUpUser(data);
+      return await UserService.signUpUser(data);
   })
 
-  const {data: dataCreate,isError: isErrorCreate,
+  const {data: dataCreate,isError: isErrorCreate,error:ErrorCreate,
     isPending :isPendingCreate ,isSuccess: isSuccessCreate}
   =mutationCreate;
   useEffect(()=>{
@@ -172,9 +172,9 @@ const AdminUser = () => {
       formCreate.resetFields();
     }
     else if(isErrorCreate) {
-      alertError("Thất bại","Tạo người dùng thất bại")
+       alertError("Thất bại",ErrorCreate?.message)
     }
-  },[isErrorCreate,isErrorCreate,dataCreate])
+  },[isErrorCreate,isSuccessCreate,dataCreate])
 
   const onCreateUser =((values) =>{
      mutationCreate.mutate({
@@ -186,8 +186,9 @@ const AdminUser = () => {
   })
   const mutationUpdate = useMutationHook(async (data) => {
       return await UserService.updateUser(data.id, data.dataUpdate,data.access_token);
+       
   });
-   const {data: dataUpdate,isError: isErrorUpdate,
+   const {data: dataUpdate,isError: isErrorUpdate,error :errorUpdate,
     isPending :isPendingUpdate ,isSuccess: isSuccessUpdate}
   =mutationUpdate;
 
@@ -197,13 +198,14 @@ const AdminUser = () => {
       queryClient.invalidateQueries(['users']);
       setIsOpenDrawer(false); 
     } else if (isErrorUpdate) {
-      alertError("Thất bại", "Cập nhật người dùng thất bại");
+      alertError("Thất bại", errorUpdate?.message);
     }
   }, [dataUpdate, isErrorUpdate, isSuccessUpdate]);
 
 
   const onUpdataUser= ( (values) =>{
     const dataUpdate={
+
       name: values.name,
       email: values.email,
       isAdmin: values.isAdmin,
@@ -221,9 +223,6 @@ const AdminUser = () => {
     });
   })
 
-  const getAllUser= async (page = 1, limit = 10,search = '',access_token) =>{
-    return await UserService.getAlllUser(page,limit,search,access_token);
-  }
   const { isLoading:isLoadingUsers , data: users } = useQuery({
       queryKey: ['users',currentPage,searchText],
       queryFn: () => UserService.getAlllUser(currentPage,limit,searchText,user.access_token),
@@ -282,7 +281,7 @@ return (
             pagination={{
               current: currentPage,
               pageSize: limit,
-              total: (users?.totalPage || 1) * limit,
+              total: users?.total||1,
               onChange: (page) => setCurrentPage(page),
               showSizeChanger: false,
             }}
