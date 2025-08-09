@@ -56,7 +56,7 @@ const AdminProduct = () => {
   
   const { isLoading:isLoadingProducts , data: products } = useQuery({
     queryKey: ['products', currentPage,searchText],
-    queryFn: () => ProductService.getAllProduct({page:currentPage, limit, search:searchText }),
+    queryFn: () => ProductService.getAllProduct({page:currentPage, limit, search:searchText ,isAdmin:true}),
     keepPreviousData: true
   });
 

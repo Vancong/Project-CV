@@ -2,9 +2,9 @@ import axios from "axios";
 import axiosJwt from "./axiosJwt";
 
 
-export const getAllProduct=async ({page=1,limit=10,search='',filters}) => {
+export const getAllProduct=async ({page=1,limit=10,search='',filters,isAdmin=false}) => {
 
-  const params={page,limit,search};
+  const params={page,limit,search,isAdmin};
   if (filters?.gender) params.gender = filters.gender;
   if (filters?.price) {
     if (filters.price === '< 1.5 Triệu') {

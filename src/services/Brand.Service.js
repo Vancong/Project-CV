@@ -25,11 +25,11 @@ export const getDetailBrand = async (id,access_token) => {
 };
 
 
-export const getAllBrand= async (page,limit,search) => {
+export const getAllBrand= async (page,limit,search,isAdmin=false) => {
 
   const res = await axios.get(`${process.env.REACT_APP_API_URL}/brand/get-all`, 
     {
-       params: { page, limit ,search}
+       params: { page, limit ,search,isAdmin}
     });
   return res.data;
 

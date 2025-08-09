@@ -1,6 +1,6 @@
 import axios from "axios"
 import axiosJwt from "./axiosJwt";
-
+console.log('API URL:', process.env.REACT_APP_API_URL);
 export const createNote = async (data,access_token) => {
     console.log(data,access_token)
    try {

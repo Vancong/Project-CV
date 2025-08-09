@@ -41,7 +41,7 @@ const AdminBrand = () => {
 
   const { isLoading:isLoadingBrands , data: Brands } = useQuery({
     queryKey: ['brands', currentPage,searchText],
-    queryFn: () => BrandService.getAllBrand(currentPage, limit,searchText ),
+    queryFn: () => BrandService.getAllBrand(currentPage, limit,searchText ,true),
     keepPreviousData: true
   });
 
@@ -96,7 +96,7 @@ const AdminBrand = () => {
               isActive: brand.isActive,
               logo: brand.logo
             })
-            console.log(brand.logo);
+
             
             const url=brand.logo;
             const imgLogo={  uid: url,
@@ -229,6 +229,7 @@ const AdminBrand = () => {
      const formData= new FormData();
      formData.append("name",values.name);
      formData.append("description",values.description||'');
+     formData.append("isActive",values.isActive);
       if (fileListUpdate[0]?.originFileObj) {
         formData.append('logo', fileListUpdate[0].originFileObj);
       }

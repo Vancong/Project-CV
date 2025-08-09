@@ -63,7 +63,7 @@ const items = [
   return (
     <>
       <HeaderCompoent  isHiddenSearch={true} isHiddenCart={true} isHiddenMenu={true} isHiddenFavorite={true} />
-      <div className='admin_page'>
+      <div className='admin_page' style={{height:'100vh'}}>
         <Menu
           mode='inline'
           style={{

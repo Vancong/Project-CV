@@ -74,6 +74,7 @@ export const logoutUser=async () => {
 };
 
 export const updateUser=async (id,dataUser,access_token) => {
+  
   try {
     const res = await axiosJwt.put(`${process.env.REACT_APP_API_URL}/user/update-user/${id}`,dataUser,{
         headers:{
@@ -83,6 +84,7 @@ export const updateUser=async (id,dataUser,access_token) => {
     return res.data;
   } catch (error) {
        const errResponse = error?.response?.data;
+
        throw new Error(errResponse?.message || 'Lỗi cập nhật người dùng');
   }
 
