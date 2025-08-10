@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Upload, Select } from 'antd';
+import { Form, Button, Upload, Select, InputNumber } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import InputComponent from '../../InputComponent/InputComponent';
 import {Fomater} from "../../../utils/fomater"
@@ -68,31 +68,42 @@ const ProductForm = ({form,fileList,setFileList,onFinish,isLoading,isFormSubmit,
           <>
             {fields.map(({ key, name, ...restField }) => (
               <div key={key} style={{ display: 'flex', gap: 4, marginBottom: 10 }}>
-                <Form.Item
+                <Form.Item 
                   {...restField}
                   name={[name, 'volume']}
                   rules={[{ required: true, message: 'Nhập dung tích' }]}
                   style={{ marginBottom: 0 }}
                 >
-                  <InputComponent placeholder="Dung tích (ml)" type="number" min={0} />
+                  <InputComponent style={{width:140}} placeholder="Dung tích (ml)" type="number" min={0} />
                 </Form.Item>
 
-                <Form.Item
-                  {...restField}
-                  name={[name, 'price']}
-                  rules={[{ required: true, message: 'Nhập giá' }]}
-                  style={{ marginBottom: 0 }}
-                >
-                  <InputComponent placeholder="Giá (VND)" type="number" min={0} />
+                 <Form.Item
+                           name={[name, 'price']}
+                          rules={[{ required: true, message: 'Vui lòng nhập giá tiền' }]}
+                  >
+                    <InputNumber
+                        style={{ width: 140 }}
+                        placeholder='Giá (VNĐ)'
+                        min={1}
+                        formatter={value => {
+                            if (!value) return '';
+                            const num = Number(value.toString().replace(/,/g, ''));
+                            if (isNaN(num)) return '';
+                            return num.toLocaleString('vi-VN'); 
+                        }}
+                        parser={value => {
+                            if (!value) return '';
+                            return value.replace(/[,.\s]/g, '');
+                        }}
+                    />
                 </Form.Item>
-
                 <Form.Item
                   {...restField}
                   name={[name, 'countInStock']}
                   rules={[{ required: true, message: 'Nhập tồn kho' }]}
                   style={{ marginBottom: 0, marginRight: 0 }}
                 >
-                  <InputComponent placeholder="Tồn kho" type="number" min={0} />
+                  <InputComponent style={{width:140}} placeholder="Tồn kho" type="number" min={0} />
                 </Form.Item>
 
                 <Button danger onClick={() => remove(name)}>x</Button>

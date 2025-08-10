@@ -5,7 +5,7 @@ import { useState } from 'react';
 const TableComponents = (props) => {
 
   const {selectionType= 'checkbox',data=[],columns=[],isLoading=false,
-  handleDeleteManyProduct=false,handleDeleteManyUser=false}=props;
+  handleDeleteMany=false }=props;
   const [rowSelectedKeys,setRowSelectedKeys]=useState([]);
   
   const rowSelection = {
@@ -18,13 +18,9 @@ const TableComponents = (props) => {
   // }),
   };
   const handleDeleteAll=() =>{
-    if(handleDeleteManyProduct){
-      handleDeleteManyProduct(rowSelectedKeys);
+    if(handleDeleteMany){
+      handleDeleteMany(rowSelectedKeys);
       setRowSelectedKeys([]);
-    }
-    if(handleDeleteManyUser) {
-      handleDeleteManyUser(rowSelectedKeys);
-       setRowSelectedKeys([]);
     }
   }
   

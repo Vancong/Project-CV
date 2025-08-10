@@ -4,7 +4,7 @@ import axiosJwt from "./axiosJwt";
 export const createBrand = async (data,access_token) => {
    try {
 
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/brand/create`, data,{
+    const res = await axiosJwt.post(`${process.env.REACT_APP_API_URL}/brand/create`, data,{
       headers:{
       token:`Bearer ${access_token}`,
     }

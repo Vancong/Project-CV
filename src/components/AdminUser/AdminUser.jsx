@@ -277,7 +277,7 @@ return (
           </DrawerComponent>
         </LoadingComponent>
         <TableComponents data={dataTable} columns={columns}
-            handleDeleteManyUser={handleDeleteManyUser}
+            handleDeleteMany={handleDeleteManyUser}
             pagination={{
               current: currentPage,
               pageSize: limit,

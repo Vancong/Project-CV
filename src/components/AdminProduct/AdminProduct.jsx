@@ -309,7 +309,7 @@ return (
         </LoadingComponent>
       </Modal>
       <TableComponents data={dataTable} columns={columns} isLoading={isLoadingProducts}
-          handleDeleteManyProduct={handleDeleteManyProduct}
+          handleDeleteMany={handleDeleteManyProduct}
           pagination={{
             current: currentPage,
             pageSize: limit,

@@ -1,6 +1,7 @@
 import { Button, Menu } from 'antd'
 import React, { useState } from 'react'
-import {UserOutlined,  AppstoreOutlined, SettingOutlined,RadarChartOutlined,FireOutlined ,UngroupOutlined} from '@ant-design/icons';
+import {UserOutlined,  AppstoreOutlined, 
+  SettingOutlined,RadarChartOutlined,FireOutlined,BarcodeOutlined  ,UngroupOutlined} from '@ant-design/icons';
 import { getItem } from '../../utils/menuUtils';
 import HeaderCompoent from '../../components/HeaderComponent/HeaderComponent';
 import AdminUser from '../../components/AdminUser/AdminUser';
@@ -9,9 +10,11 @@ import "./AdminPage.scss"
 import AdminBrand from '../../components/AdminBrand/AdminBrand';
 import AdminNote from '../../components/AdminNote/AdminNote';
 import AdminNoteGroup from '../../components/AdminNoteGroup/AdminNoteGroup';
+import AdminVoucher from '../../components/AdminVoucher/AdminVoucher';
 const AdminPage = () => {
 const items = [
   getItem('Sản phẩm', 'product', <AppstoreOutlined />),
+  getItem('Mã giảm giá', 'voucher',<BarcodeOutlined />),
   getItem('Người dùng', 'user', <UserOutlined />,),
   getItem('Navigation Three1', 'sub4', <SettingOutlined />),
   getItem('Thương Hiệu', 'brand',<RadarChartOutlined />),
@@ -33,6 +36,12 @@ const items = [
       case ('product'):
         return (
           <AdminProduct />
+
+        )
+
+      case ('voucher'):
+        return (
+          <AdminVoucher />
 
         )
       case ('brand'):
