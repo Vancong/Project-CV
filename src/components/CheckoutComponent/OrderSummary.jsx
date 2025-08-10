@@ -1,26 +1,95 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./CheckoutComponent.scss"
-import { useNavigate } from 'react-router-dom';
-const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary}) => {
+import { useLocation, useNavigate } from 'react-router-dom';
+import VoucherSelectorComponent from "../VoucherSelectorComponent/VoucherSelectorComponent"
+import *as VoucherSerice from "../../services/Voucher.Service";
+import { useSelector } from 'react-redux';
+const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary }) => {
   const navigate=useNavigate();
+  const [selectedVoucher, setSelectedVoucher] = useState(null);
+  const [cartTotal, setCartTotal] = useState(0);
+  const [inputVoucher,setInputVoucher]=useState(null);
+  const user=useSelector((state)=>state.user)
+  const [error,setError]=useState(false);
+  const location=useLocation();
+
+
+  const onSelectVoucher = (voucher) => {
+       setSelectedVoucher(voucher);
+  };
+
+  useEffect(()=>{
+    setSelectedVoucher(location.state||null)
+  },[location.state])
+  
+
+  const onChangeInputVoucher=(e) =>{
+      setInputVoucher(e.target.value);
+      setError(false)
+  }
+
+  useEffect(()=>{
+      setInputVoucher(null)
+      setError(false)
+  },[selectedVoucher])
+  
+  const handleApplyVocuher=async ()=>{
+      const userId=user?.id;
+      const access_token=user?.access_token;
+      const data={
+        code: inputVoucher,
+        totalPrice: orderSummary.totalPrice
+      }
+      try {
+        const res = await VoucherSerice.check(data, userId, access_token);
+        if (res?.data?.iSuccess) {
+          setSelectedVoucher(res.data.voucher);
+          setError(false);
+        }
+      } catch (error) {
+        setError( error.response?.data?.message);
+      }
+    }
+
+
   useEffect(() => {
     if (!cartItems || cartItems.length === 0) return;
 
     let total = cartItems.reduce((sum, item) => {
       return sum + item.quantity * item.price;
     }, 0);
+    setCartTotal(total);
 
     let shipping = 28000;
     if (total >= 1000000) {
       shipping = 0;
     }
 
+    let discount = 0;
+    if (selectedVoucher) {
+      if (selectedVoucher.discountType === "percentage") {
+        discount = total * (selectedVoucher.discountValue / 100);
+        if(selectedVoucher.maxDiscountValue) {
+          discount=Math.min(discount,selectedVoucher.maxDiscountValue)
+        }
+      } else {
+        discount = selectedVoucher.discountValue;
+      }
+    }
+    discount=Math.floor(discount)
+    let finalPrice = total - discount + shipping;
+    finalPrice=Math.floor(finalPrice);
+    if(finalPrice<0){
+      finalPrice=0;
+    }
     setOrderSummary({
       totalPrice: total,
       shipping: shipping,
-      finalPrice: total+shipping
+      discountCode: selectedVoucher?.code,
+      discountValue: discount,
+      finalPrice: finalPrice
     });
-  }, [cartItems, setOrderSummary]);
+  }, [cartItems, setOrderSummary,selectedVoucher]);
 
   return (
     <div className="checkout_right">
@@ -65,29 +134,64 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary}) => {
                       )
                   })}
                   
-                
+                  
+                  
+
                   <tr>
                     <td colSpan={2}>
-                      <div style={{ display: 'flex', gap: '8px'}}>
-                        <input type="text" placeholder="Mã ưu đãi" style={{ flex: 1 }} />
-                        <button>Áp dụng</button>
+                       <div style={{ display: 'flex',alignItems:'center', gap: '2px',padding:'10px 0px' }}>
+                        {!selectedVoucher ? (
+                          <>
+                            <input
+                              type="text"
+                              placeholder="Mã ưu đãi"
+                              value={inputVoucher}
+                              onChange={onChangeInputVoucher}
+                              style={{height:'35px'}}
+                            />
+                            <VoucherSelectorComponent
+                              cartTotal={cartTotal}
+                              onSelect={onSelectVoucher}
+                            />
+                            <button  disabled={!inputVoucher||error}  onClick={handleApplyVocuher} >
+                                  Áp dụng
+                            </button>
+                          </>
+                            ) : (
+                              <>
+                                <div style={{ flex: 1 }}>
+                                  <p>Mã ưu đãi: <b>{selectedVoucher?.code}</b></p>
+                                  <p>Tiết kiệm ngay : <b>{orderSummary?.discountValue?.toLocaleString()}₫</b></p>
+                                </div>
+                                <button style={{width:'100px',height:'30px'}} onClick={() => setSelectedVoucher(null)}>Xóa</button> <br/>
+                                <span>
+                                  
+                                </span>
+                              </>
+                            )}
                       </div>
+                      {error&& (<p style={{color:'red',fontSize:'14px'}}>{error} </p>)}
                     </td>
                   </tr>
 
                   <tr>
                     <td><strong>Tổng cộng</strong></td>
-                    <td style={{ textAlign: 'right' }}>{orderSummary?.totalPrice.toLocaleString()}₫</td>
+                    <td style={{ textAlign: 'right',fontWeight: 'bold' }}>{orderSummary?.totalPrice?.toLocaleString()}₫</td>
                   </tr>
 
                   <tr>
-                    <td>Phí ship</td>
-                    <td style={{ textAlign: 'right' }}>{orderSummary?.shipping}₫</td>
+                    <td><strong>Phí ship</strong></td>
+                    <td style={{ textAlign: 'right',fontWeight: 'bold' }}>{orderSummary?.shipping}₫</td>
+                  </tr>
+
+                   <tr>
+                    <td><strong>Giảm giá</strong></td>
+                    <td style={{ textAlign: 'right', fontWeight: 'bold' }}>-{orderSummary?.discountValue?.toLocaleString()}₫</td>
                   </tr>
 
                   <tr>
                     <td><strong>Tổng tiền</strong></td>
-                    <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{orderSummary?.finalPrice.toLocaleString()}₫</td>
+                    <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{orderSummary?.finalPrice?.toLocaleString()}₫</td>
                   </tr>
             </tbody>
           </table>

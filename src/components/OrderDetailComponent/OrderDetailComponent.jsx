@@ -116,7 +116,7 @@ const OrderDetailComponent = () => {
                     <div className="row"><span>Tạm tính:</span> 
                             <span className='price'>{(orderDeatil.totalPrice).toLocaleString()}₫</span>
                     </div>
-                    <div className="row"><span>Giảm giá:</span> <span className='price'>-300,000đ</span></div>
+                    <div className="row"><span>Giảm giá:</span> <span className='price'>-{(orderDeatil.discountValue).toLocaleString()}</span></div>
                     <div className="row" ><span>Phí vận chuyển:</span>
                             <span className='price'>{(orderDeatil.shipping).toLocaleString()}₫</span>
                     </div>

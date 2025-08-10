@@ -57,3 +57,13 @@ export const deleteMany= async (ids,access_token) => {
   });
   return res.data;
 }
+
+export const check= async (data,userId,access_token) => {
+
+  const res = await axiosJwt.post(`${process.env.REACT_APP_API_URL}/voucher/check/${userId}`,data,{
+    headers:{
+      token:`Bearer ${access_token}`,
+    }
+  });
+  return res.data;
+}

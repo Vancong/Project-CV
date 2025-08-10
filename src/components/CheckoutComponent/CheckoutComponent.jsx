@@ -13,6 +13,8 @@ import { clearCart } from '../../redux/slices/CartSlice';
 const CheckoutComponent = () => {
     const user=useSelector((state)=>state.user);
     const dispatch=useDispatch();
+
+
     const [fullAddress, setFullAddress] = useState({
         province: null,
         district: null,
@@ -29,7 +31,9 @@ const CheckoutComponent = () => {
     const [orderSummary,setOrderSummary]=useState({
         shipping:0,
         totalPrice:0,
-        finalPrice:0
+        finalPrice:0,
+        discountCode:null,
+        discoutValue:0
     })
 
     const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -132,6 +136,7 @@ const CheckoutComponent = () => {
         });
     };
 
+   
 
   return (
     <div>
@@ -192,6 +197,7 @@ const CheckoutComponent = () => {
         <OrderSummary cartItems={cartItems} handleOrder={handleOrder} 
                       setOrderSummary={setOrderSummary}
                       orderSummary={orderSummary}
+                      type='checkout'
         />
         </div>
       </LoadingComponent>

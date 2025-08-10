@@ -99,8 +99,33 @@ const VoucherFormComponent = ({form,onFinish,isLoading,mode = 'create' }) => {
             }}
         />
 
+
+        
         </Form.Item>
       )}
+
+        {discountType &&discountType==='percentage'&& (
+        <Form.Item
+          label='Giảm tối đa (VNĐ)'
+          name="maxDiscountValue"
+        >
+          <InputNumber
+            style={{ width: 235 }}
+            min={0}
+            formatter={value => {
+                if (!value) return '';
+                const num = Number(value.toString().replace(/,/g, ''));
+                if (isNaN(num)) return '';
+                return num.toLocaleString('vi-VN'); 
+                
+            }}
+            parser={value => {
+                if (!value) return '';
+                return value.replace(/[,.\s]/g, '');
+            }}
+        />
+        </Form.Item>
+       )}
 
       <Form.Item
         label="Giá trị đơn hàng được sử dụng "

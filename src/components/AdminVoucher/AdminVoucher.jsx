@@ -94,46 +94,43 @@ const AdminVoucher = () => {
         isSuccess: isSuccessDeleteMany,error: errorDeleteMany
   }=mutationDeleteMany;
 
-  useEffect(()=>{
-    if(dataCreate?.status==='OK'&&isSuccessCraete) {
-        alertSuccess("Thêm mã giảm giá thành công");
-        queryClient.invalidateQueries(['voucher'])
-        onCancel();
+  useEffect(() => {
+    if (dataCreate?.status === 'OK' && isSuccessCraete) {
+      alertSuccess("Thêm mã giảm giá thành công");
+      queryClient.invalidateQueries(['voucher']);
+      onCancel();
+    } else if (isErrorCreate) {
+      alertError("Thất bại", errorCreate?.message);
     }
-    else if(isErrorCreate) {
-            alertError("Thất bại", errorCreate?.message);
-    }
+  }, [isSuccessCraete, isErrorCreate]);
 
-    if(dataUpdate?.status==='OK'&&isSuccessUpdate) {
-        alertSuccess("Cập nhật giảm giá thành công");
-        queryClient.invalidateQueries(['voucher'])
-        setIsOpenDrawer(false);
+  useEffect(() => {
+    if (dataUpdate?.status === 'OK' && isSuccessUpdate) {
+      alertSuccess("Cập nhật giảm giá thành công");
+      queryClient.invalidateQueries(['voucher']);
+      setIsOpenDrawer(false);
+    } else if (isErrorUpdate) {
+      alertError("Thất bại", errorUpdate?.message);
     }
+  }, [isSuccessUpdate, isErrorUpdate]);
 
-     else if(isErrorUpdate) {
-            alertError("Thất bại", errorUpdate?.message);
+  useEffect(() => {
+    if (dataDelete?.status === 'OK' && isSuccessDelete) {
+      alertSuccess("Xóa mã giảm giá thành công");
+      queryClient.invalidateQueries(['voucher']);
+    } else if (isErrorDelete) {
+      alertError("Thất bại", errorDelete?.message); 
     }
+  }, [isSuccessDelete, isErrorDelete]);
 
-     if(dataDelete?.status==='OK'&&isSuccessDelete) {
-        alertSuccess("Xóa mã giảm giá thành công");
-        queryClient.invalidateQueries(['voucher'])
+  useEffect(() => {
+    if (dataDeleteMany?.status === 'OK' && isSuccessDeleteMany) {
+      alertSuccess("Xóa mã giảm giá thành công");
+      queryClient.invalidateQueries(['voucher']);
+    } else if (isErrorDeleteMany) {
+      alertError("Thất bại", errorDeleteMany?.message);
     }
-
-     else if(isErrorDelete) {
-            alertError("Thất bại", errorUpdate?.message);
-    }
-
-    if(dataDeleteMany?.status==='OK'&&isSuccessDeleteMany) {
-        alertSuccess("Xóa mã giảm giá thành công");
-        queryClient.invalidateQueries(['voucher'])
-    }
-
-     else if(isErrorDeleteMany) {
-            alertError("Thất bại", errorDeleteMany?.message);
-    }
-  },[isSuccessCraete,isSuccessUpdate,isErrorCreate,isErrorUpdate,
-    isErrorDelete,isSuccessDelete,isSuccessDeleteMany,isErrorDeleteMany])
-
+ }, [isSuccessDeleteMany, isErrorDeleteMany]);
 
   const onFinish=(values,type) =>{
     const data = {
@@ -148,6 +145,10 @@ const AdminVoucher = () => {
         endDate: values.endDate.format('YYYY-MM-DD'),
       
     }; 
+
+    if(data.discountType==='percentage'){
+        data.maxDiscountValue=values.maxDiscountValue;
+      }
     if(type==='create'){
       mutationCreate.mutate({data,access_token: user?.access_token})
     }
@@ -172,6 +173,7 @@ const AdminVoucher = () => {
         userLimit: record.userLimit,
         minOrderValue: record.minOrderValue,
         isActive: record.isActive,
+        maxDiscountValue: record.maxDiscountValue||null,
     })
       setIsOpenDrawer(true)
     
@@ -202,7 +204,9 @@ const AdminVoucher = () => {
      {
       title: 'Giá đơn hàng được dùng', 
       dataIndex: 'minOrderValue',
-      render: text => <a>{text}</a>,
+       render: (text) => {
+          return text.toLocaleString('vi-VN') + '₫';
+      },
       sorter: (a,b) => a.minOrderValue - b.minOrderValue
     },
     {
