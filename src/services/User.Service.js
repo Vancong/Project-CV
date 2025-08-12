@@ -110,3 +110,26 @@ export const deleteManyUser= async (data,access_token) =>{
   
   return res.data;
 }
+
+
+export const sendOtp= async (email) =>{
+  console.log(email)
+  const res=  await axiosJwt.get(`${process.env.REACT_APP_API_URL}/forgot-password/sendOtp/${email}`)
+  
+  return res.data;
+}
+
+export const verifyOtp= async (data) =>{
+  const res=  await axiosJwt.post(`${process.env.REACT_APP_API_URL}/forgot-password/verify-otp`,data)
+
+  return res.data;
+}
+
+export const resetPassword= async (data,access_token) =>{
+  const res=  await axiosJwt.patch(`${process.env.REACT_APP_API_URL}/forgot-password/reset-password/${data.userId}`,data,{
+    headers:{
+        token:`Bearer ${access_token}`,
+    }
+  })
+  return res.data;
+}

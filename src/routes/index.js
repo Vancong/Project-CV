@@ -12,6 +12,8 @@ import CheckoutPage from "../pages/CheckoutPage/CheckoutPage"
 import MyOrderPage from "../pages/MyOrderPage/MyOrderPage"
 import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage"
 import OrderSuccessPage from "../pages/OrderSuccessPage/OrderSuccessPage"
+import ForgotPasswordPage from "../pages/ForgotPasswordPage/ForgotPasswordPage"
+import ResetPasswordPage from "../pages/ResetPasswordPage/ResetPasswordPage "
 
  export const routes= [
     {
@@ -24,6 +26,7 @@ import OrderSuccessPage from "../pages/OrderSuccessPage/OrderSuccessPage"
         page: CheckoutPage,
         isShowHeader: true,
         isPrivate: true
+
     },
     {
         path: "/order-success",
@@ -63,9 +66,19 @@ import OrderSuccessPage from "../pages/OrderSuccessPage/OrderSuccessPage"
         isShowHeader: true
     },
      {
+        path: "/forgot-password",
+        page: ForgotPasswordPage,
+        isShowHeader: true
+    },
+    {
+        path: "/reset-password",
+        page: ResetPasswordPage,
+        isShowHeader: true
+    },
+     {
         path: "/sign-in",
         page: SigninPage,
-        isShowHeader: false
+        isShowHeader: true
     },
      {
         path: "/sign-up",

@@ -83,9 +83,20 @@ return (
               <Routes>
                 {
                   routes.length>0&&routes.map(route =>{
-                    const Page=route.page 
-                    const ischeckAuth=!route.isPrivate || user.isAdmin      
+                    const Page=route.page      
                     const Layout= route.isShowHeader? DefaultComponent: Fragment
+                    const isUserLoggedIn = Boolean(user?.access_token);
+                    const isUserAdmin = Boolean(user?.isAdmin);
+
+                    let ischeckAuth = true;
+                    if (route.isPrivate && !isUserLoggedIn) {
+                      ischeckAuth = false;
+                    }
+                    
+                    if (route.isAdminOnly && !isUserAdmin) {
+                        ischeckAuth = false; 
+                    }
+                    console.log(user,ischeckAuth)
                     return (
                       <Route key={route.path} path={route.path} element= {
                         ischeckAuth ? (

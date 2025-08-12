@@ -17,6 +17,7 @@ import { setFavoriteIds } from '../../redux/slices/FavoriteSlice'
 const SigninPage = () => {
   const [email,setEmail] =useState('');
   const [password,setPasswrod]=useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const location=useLocation();
   const dispatch=useDispatch();
 
@@ -25,9 +26,19 @@ const SigninPage = () => {
     navigate('/sign-up');
   }
 
+
   const mutation=useMutationHook(
       data => UserService.loginUser(data)
   )
+
+  useEffect(() => {
+      if (location.state?.email && location.state?.password) {
+        mutation.mutate({
+          email: location.state.email,
+          password: location.state.password
+        });
+      }
+  }, [location.state]);
 
   const {data,isPending,isSuccess}= mutation;
 
@@ -46,10 +57,12 @@ const SigninPage = () => {
             }
           }
 
-          if(location.state) {
+          if(location.state&&!location.state.email&&location.state.password) {
             navigate(location?.state)
+            console.log('stat')
           }
           else {
+            console.log('trang chu ss')
             navigate('/')
           }
         }
@@ -105,18 +118,43 @@ const SigninPage = () => {
               placeholder="Email"  
               value={email} 
               onChange={handleOnchangeEmail} 
+              onKeyDown={e => {
+                if (e.key === 'Enter' && email && password) {
+                  handleSignIn();
+                }
+              }}
           />
           <InputFormComponent 
               className="inputAcccount" 
               placeholder="Mật khẩu"   
+              type={showPassword ? 'text' : 'password'}
               value={password} 
-              onChange={handleOnchangePassword}   
+              onChange={handleOnchangePassword}  
+              onKeyDown={e => {
+                if (e.key === 'Enter' && email && password) {
+                  handleSignIn();
+                }
+              }}
+
           />
+
+          
+          <label style={{ display: 'block', marginTop: 10,marginRight:170, cursor: 'pointer' }}>
+              <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+              style={{ marginRight: 8 }}
+              />
+              Hiện mật khẩu
+          </label>
+
           {data?.status === 'ERR' && (
             <div style={{ color: 'red', marginTop: '10px' }}>
                 {data.message}
             </div>
           )}
+
           <LoadingComponent isPending={isPending}>
             <ButtonComponent
                 disabled={!email.length || !password.length}
@@ -130,7 +168,7 @@ const SigninPage = () => {
                                     
             />
           </LoadingComponent>
-          <p> Quên mật khẩu? </p>
+          <p style={{cursor:'pointer'}} onClick={()=> navigate('/forgot-password')}> Quên mật khẩu? </p>
           <p>Bạn chưa có tài khoản. <span style={{cursor:'pointer'}} onClick={handleNavigateSignUp}>Đăng ký tại đây.</span> </p>
         </div>
 

@@ -124,7 +124,7 @@ const CheckoutComponent = () => {
             product: item.product._id,
             quantity: item.quantity,
             volume: item.volume,
-            price: item.price
+            price: item.price,
         }));
 
         let data= {
