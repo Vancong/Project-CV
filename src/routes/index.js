@@ -11,6 +11,7 @@ import CartPage from "../pages/CartPage/CartPage"
 import CheckoutPage from "../pages/CheckoutPage/CheckoutPage"
 import MyOrderPage from "../pages/MyOrderPage/MyOrderPage"
 import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage"
+import OrderSuccessPage from "../pages/OrderSuccessPage/OrderSuccessPage"
 
  export const routes= [
     {
@@ -21,24 +22,34 @@ import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage"
     {
         path: "/checkout",
         page: CheckoutPage,
-        isShowHeader: true
+        isShowHeader: true,
+        isPrivate: true
+    },
+    {
+        path: "/order-success",
+        page: OrderSuccessPage,
+        isShowHeader: true,
+        isPrivate: true
     },
     {
         path: "/cart",
         page: CartPage,
-        isShowHeader: true
+        isShowHeader: true,
+        isPrivate: true
     },
 
     {
         path: "/my-order",
         page: MyOrderPage,
-        isShowHeader: true
+        isShowHeader: true,
+        isPrivate: true
     },
 
     {
         path: "/my-order/detail/:orderCode",
         page: OrderDetailPage,
-        isShowHeader: true
+        isShowHeader: true,
+        isPrivate: true
     },
 
     {
@@ -70,7 +81,8 @@ import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage"
     {
         path: "/profile-user",
         page:ProfilePage,
-        isShowHeader: true
+        isShowHeader: true,
+        isPrivate: true
     },
     {
         path: "/admin/dashboard",

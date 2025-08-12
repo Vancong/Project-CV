@@ -10,7 +10,7 @@ const VoucherSelectorComponent = ({ cartTotal, onSelect }) => {
 
   const {isLoanding,data:voucherData} =useQuery({
     queryKey: ['voucher'],
-    queryFn: ()=> VoucherService.getAll({access_token:user?.access_token}) ,
+    queryFn: ()=> VoucherService.getAll({userId:user?.id, access_token:user?.access_token}) ,
   })
 
 

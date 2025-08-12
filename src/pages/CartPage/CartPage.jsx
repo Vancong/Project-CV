@@ -14,9 +14,10 @@ const CartPage = () => {
   const[cartTotalPrice,setCartTotalPrice]=useState(0);
   const [error,setError]=useState(false);
   const [inputVoucher,setInputVoucher]=useState(null);
-  const [discountValue,setDiscountValue]=useState(0);
+  const [discountValue,setDiscountValue]=useState(null);
   const navigate=useNavigate();
   const user=useSelector((state)=>state.user)
+
   const onSelect=(voucher) =>{
         setSelectedVoucher(voucher)
         setInputVoucher(null)
@@ -44,10 +45,10 @@ const CartPage = () => {
                 discount=Math.min(discount,selectedVoucher.maxDiscountValue)
             }
         }
+        discount=Math.floor(discount);
+         setDiscountValue(discount);
     }
-    discount=Math.floor(discount);
-    setDiscountValue(discount);
-
+    
     let finalPrice=totalPrice-discount;
     if(finalPrice<0){
         finalPrice=0;
@@ -117,7 +118,7 @@ const CartPage = () => {
                               <div className='voucher'>
                                 <div>
                                   <p>Mã ưu đãi: <b>{selectedVoucher?.code}</b></p>
-                                  <p>Tiết kiệm ngay : <b>{discountValue.toLocaleString()}₫</b></p>
+                                  <p>Tiết kiệm ngay : <b>{discountValue?.toLocaleString()}₫</b></p>
                                    <button style={{width:'100px',height:'30px'}} onClick={() => setSelectedVoucher(null)}>Xóa</button> 
                                 </div>
                               </div>

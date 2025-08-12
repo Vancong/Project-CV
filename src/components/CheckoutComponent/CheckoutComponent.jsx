@@ -9,12 +9,14 @@ import OrderSummary from './OrderSummary';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import *as OrderService from "../../services/Order.Service";
 import { clearCart } from '../../redux/slices/CartSlice';
+import { useNavigate } from 'react-router-dom';
 
 const CheckoutComponent = () => {
     const user=useSelector((state)=>state.user);
     const dispatch=useDispatch();
-
-
+    const [isValidForm, setIsValidForm] = useState(false);
+    const navigate=useNavigate();
+    const [orderId, setOrderId] = useState(null);
     const [fullAddress, setFullAddress] = useState({
         province: null,
         district: null,
@@ -80,6 +82,7 @@ const CheckoutComponent = () => {
     };
 
     const muatationOrder = useMutationHook(async ({id, access_token ,data}) => {
+         console.log("Gọi COD order", data) 
         return await  OrderService.create( id, access_token,data )
     });
 
@@ -87,25 +90,34 @@ const CheckoutComponent = () => {
           isSuccess: isSuccessOrder,data:dataOrder}=muatationOrder;
 
     useEffect( () =>{
-        console.log(isSuccessOrder)
-        const handleClearCart = async () => {
-        if (isSuccessOrder) {
-            const access_token = user?.access_token;
-            const userId = user?.id;
-        try {
-            await CartService.clearCart(userId, access_token);
-            dispatch(clearCart()); 
-        } catch (err) {
-            console.error("Xoá giỏ hàng thất bại:", err);
+        console.log(dataOrder?.data)
+        if(dataOrder?.status==='OK'){
+            const handleClearCart = async () => {
+                const access_token = user?.access_token;
+                const userId = user?.id;
+                console.log(dataOrder.data.isPaid);
+                console.log(dataOrder.data.finalPrice)
+                navigate(`/order-success?orderCode=${dataOrder.data.orderCode}&finalPrice=${dataOrder.data.finalPrice}&isPaid=${dataOrder.data.isPaid}`     
+                )
+                try {
+                    await CartService.clearCart(userId, access_token);
+                    dispatch(clearCart()); 
+                } catch (err) {
+                    console.error("Xoá giỏ hàng thất bại:", err);
+                }
+            }
+
+             handleClearCart();
+
         }
-        }}
 
-        handleClearCart();
-
-    },[isSuccessOrder])
+    },[isSuccessOrder,dataOrder])
     
+    useEffect(() => {
+        setIsValidForm(validateForm());
+    }, [formData, fullAddress]);
 
-    const handleOrder = () => {
+    const handleOrder = (updateDataPay=null) => {
         if (!validateForm()) return;
         
         const orderItems = cartItems?.map((item) => ({
@@ -115,8 +127,7 @@ const CheckoutComponent = () => {
             price: item.price
         }));
 
-
-        const data= {
+        let data= {
             user: user?.id,
             ...formData,
             address:{
@@ -129,11 +140,14 @@ const CheckoutComponent = () => {
             ...orderSummary,
             paymentMethod:paymentMethod
         }
+        if(updateDataPay) {
+            data={...data,...updateDataPay}
+        }
+
+
         muatationOrder.mutate({id:user?.id,access_token: user?.access_token,data})
 
-        console.log("Đặt hàng với:", {
-            data
-        });
+    
     };
 
    
@@ -161,34 +175,15 @@ const CheckoutComponent = () => {
                                 Thanh toán khi nhận hàng (COD)
                     </label>
 
-                    <label>
-                        <input
-                            type="radio"
-                            value="bank_transfer"
-                            checked={paymentMethod === "bank_transfer"}
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                        />
-                                Chuyển khoản ngân hàng
-                    </label>
 
                     <label>
                         <input
                             type="radio"
-                            value="momo"
-                            checked={paymentMethod === "momo"}
+                            value="paypal"
+                            checked={paymentMethod === "paypal"}
                             onChange={(e) => setPaymentMethod(e.target.value)}
                         />
-                        Ví MoMo
-                    </label>
-
-                    <label>
-                        <input
-                            type="radio"
-                            value="zalopay"
-                            checked={paymentMethod === "zalopay"}
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                        />
-                            ZaloPay
+                            PayPal
                     </label>
                 </div>
 
@@ -198,6 +193,8 @@ const CheckoutComponent = () => {
                       setOrderSummary={setOrderSummary}
                       orderSummary={orderSummary}
                       type='checkout'
+                      paymentMethod={paymentMethod}
+                      isValidForm={isValidForm}
         />
         </div>
       </LoadingComponent>

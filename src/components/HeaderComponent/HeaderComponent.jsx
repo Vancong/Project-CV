@@ -83,7 +83,15 @@ return (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px',marginLeft:'16px' }}>   
                    {!isHiddenFavorite&&user?.access_token &&(
                     <Badge  count={favorite?.total||0} size='small' 
-                            onClick={()=> navigate('/type/favorite')}
+                            onClick={()=> {
+                              if(!user?.access_token){
+                                navigate('/login',{state:'/type/favorite'})
+                              }
+                              else {
+                                 navigate('/type/favorite')
+                              }
+                             
+                            }}
                     >
                       <span>
                          <HeartOutlined style={{fontSize:'29px'}} />

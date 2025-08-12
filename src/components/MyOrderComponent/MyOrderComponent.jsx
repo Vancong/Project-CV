@@ -23,7 +23,9 @@ const MyOrderComponent = () => {
     confirmed: 'Đã xác nhận',
     shipping: 'Đang giao hàng',
     completed: 'Giao hàng thành công',
-    cancelled: 'Đã hủy'
+    cancelled: 'Đã hủy',
+    refund_pending:'Đang chờ xử lý hoàn tiền',
+    refunded: 'Đã hoàn tiền thành công'
   }
 
   return (

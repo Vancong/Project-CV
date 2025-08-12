@@ -44,6 +44,13 @@
         background-color: #ef4444; 
     }
 
+    .refund_pending {
+        background-color: #fbbf24; 
+    }
+
+    .refunded {
+        background-color: #6ee7b7; 
+    }
 
     .payment_method {
       background-color: #f59e0b;
@@ -122,7 +129,7 @@
       gap: 10px;
       .btn {
         cursor: pointer;
-        width: 150px;
+        width: 160px;
         height: 40px;
         padding: 8px 24px;
         color: white;

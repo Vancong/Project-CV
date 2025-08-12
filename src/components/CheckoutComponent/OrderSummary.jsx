@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import "./CheckoutComponent.scss"
-import { useLocation, useNavigate } from 'react-router-dom';
+import { data, useLocation, useNavigate } from 'react-router-dom';
 import VoucherSelectorComponent from "../VoucherSelectorComponent/VoucherSelectorComponent"
 import *as VoucherSerice from "../../services/Voucher.Service";
 import { useSelector } from 'react-redux';
-const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary }) => {
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { alertConfirm,alertError,alertSuccess } from '../../utils/alert';
+import *as PaymentService from "../../services/Payment.Service.js";
+
+const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymentMethod ,isValidForm}) => {
   const navigate=useNavigate();
   const [selectedVoucher, setSelectedVoucher] = useState(null);
   const [cartTotal, setCartTotal] = useState(0);
@@ -12,16 +16,24 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary }) => 
   const user=useSelector((state)=>state.user)
   const [error,setError]=useState(false);
   const location=useLocation();
+  const [paypalClientId, setPaypalClientId] = useState(null);
 
+  const amount = (orderSummary.finalPrice / 24000).toFixed(2);
+  const currency = "USD" ;
 
   const onSelectVoucher = (voucher) => {
        setSelectedVoucher(voucher);
   };
 
+
+
   useEffect(()=>{
-    setSelectedVoucher(location.state||null)
+    if(location?.state?.code&&location?.state?.discountValue) {
+        setSelectedVoucher(location.state)
+    }
   },[location.state])
   
+
 
   const onChangeInputVoucher=(e) =>{
       setInputVoucher(e.target.value);
@@ -90,6 +102,31 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary }) => 
       finalPrice: finalPrice
     });
   }, [cartItems, setOrderSummary,selectedVoucher]);
+
+  useEffect(()=>{
+    const addPaypal=async () =>{
+      try {
+          const { data } = await PaymentService.getConfig();
+          setPaypalClientId(data);
+        } catch (err) {
+          console.error("Lỗi ", err);
+      }
+    }
+    addPaypal(); 
+  },[])
+
+  const onSuccessPayPal = (data, actions) => {
+    return actions.order.capture().then((details) => {
+      const updateDataPay = {
+        isPaid: true,
+        status: "confirmed",
+        paidAt: details.update_time,
+        paypalOrderId: data.orderID
+      };
+      handleOrder(updateDataPay)
+    });
+  };
+
 
   return (
     <div className="checkout_right">
@@ -199,7 +236,45 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary }) => 
           <p className="privacy_note">
             Thông tin cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng theo <a href="#">privacy policy</a>.
           </p>
-          <div className="order_btn"  onClick={handleOrder}>Đặt hàng</div>
+          {paymentMethod==='paypal' && (
+          <PayPalScriptProvider 
+              options={{
+                "client-id": paypalClientId, 
+                currency: currency,
+              }}
+            >
+              <PayPalButtons
+             
+                style={{ layout: "vertical" }}
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: {
+                          currency_code: currency,
+                          value: amount,
+                        },
+                      },
+                    ],
+                  });
+                }}
+                onApprove={onSuccessPayPal}
+                onError={(err) => {
+                  console.log(err)
+                  alertError("Có lỗi xảy ra khi thanh toán");
+                }}
+                disabled={!isValidForm}
+              />
+            </PayPalScriptProvider>
+          )}
+          
+
+          {paymentMethod==='cod'&&(
+          
+              <div className="order_btn"  onClick={()=> handleOrder()}>Đặt hàng</div>
+          )}
+             
+          
           <div className="cart_btn" onClick={()=> navigate('/cart')}>Quay lại giỏ hàng</div>
     </div>
   )

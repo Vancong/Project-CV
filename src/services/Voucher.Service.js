@@ -17,9 +17,9 @@ export const create= async (data,access_token) => {
   }
 };
 
-export const getAll = async ({page,limit,search,access_token}) => {
+export const getAll = async ({userId,page,limit,search,access_token}) => {
 
-  const res = await axiosJwt.get(`${process.env.REACT_APP_API_URL}/voucher/getAll`,{
+  const res = await axiosJwt.get(`${process.env.REACT_APP_API_URL}/voucher/getAll/${userId}`,{
     params: { page, limit ,search},
     headers:{
       token:`Bearer ${access_token}`,

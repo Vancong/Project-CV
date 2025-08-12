@@ -36,13 +36,14 @@ const OrderDetailComponent = () => {
     },[isSuccessPending,dataChangeStatus])
     const canCancel = orderDeatil?.status === 'confirmed' || orderDeatil?.status === 'pending';
     const handleCancel= () =>{
-
-  
+        let status='cancelled'
+            if(data.isPaid) {
+                status='refund_pending';
+            }
             const data={
-            orderCode,
-            status: 'cancelled'
-        }
-        console.log(user?.id,user?.access_token,data)
+                orderCode,
+                status
+            }
         mutationChangeStatus.mutate({id:user?.id,access_token:user?.access_token,data});
        
     }
@@ -52,7 +53,9 @@ const OrderDetailComponent = () => {
         confirmed: 'Đã xác nhận',
         shipping: 'Đang giao hàng',
         completed: 'Giao hàng thành công',
-        cancelled: 'Đã hủy'
+        cancelled: 'Đã hủy',
+        refund_pending:'Đang chờ xử lý hoàn tiền',
+        refunded: 'Đã hoàn tiền thành công'
     }
   return (
     <LoadingComponent isPending={isLoading}>
@@ -62,17 +65,21 @@ const OrderDetailComponent = () => {
 
                 <div className="order_info">
                     <div className="left">
-                    <p><strong>Ngày đặt hàng:</strong>{new Date(orderDeatil.createdAt).toLocaleDateString('vi-VN')}</p>
-                    <p><strong>Trạng thái:</strong> <span className={`status_badge ${orderDeatil.status}`}>
-                        { statusOrder[orderDeatil.status]} </span>
-                    </p>
-                    <p><strong>Thanh toán:</strong> <span className="payment_method">{orderDeatil.paymentMethod}</span></p>
+                        <p><strong>Ngày đặt hàng:</strong>{new Date(orderDeatil.createdAt).toLocaleDateString('vi-VN')}</p>
+                        <p><strong>Trạng thái:</strong> <span className={`status_badge ${orderDeatil.status}`}>
+                            { statusOrder[orderDeatil.status]} </span>
+                        </p>
+                        <p><strong>Thanh toán:</strong> <span className="payment_method">{orderDeatil.paymentMethod}</span></p>
+                        {orderDeatil?.paidAt&&(
+                            <p><strong>Thanh toán vào lúc:</strong> 
+                            <span> {new Date(orderDeatil.paidAt).toLocaleString("vi-VN")}</span></p>
+                        )}
                     </div>
-                    <div className="right">
-                    <p><strong>Khách hàng:</strong> {orderDeatil.name}</p>
-                    <p><strong>Điện thoại:</strong> {orderDeatil.phone}</p>
-                    <p><strong>Email:</strong> {orderDeatil.email || "Không có"} </p>
-                    <p><strong>Địa chỉ: </strong>{addres}</p>
+                        <div className="right">
+                        <p><strong>Khách hàng:</strong> {orderDeatil.name}</p>
+                        <p><strong>Điện thoại:</strong> {orderDeatil.phone}</p>
+                        <p><strong>Email:</strong> {orderDeatil.email || "Không có"} </p>
+                        <p><strong>Địa chỉ: </strong>{addres}</p>
                     </div>
                 </div>
 

@@ -93,7 +93,7 @@ return (
                               <Page />
                             </Layout>
                         ): (
-                            <Navigate to="/" replace />
+                            <Navigate to="/" state={route.path} replace />
                         )
                       
                       } />
