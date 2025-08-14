@@ -39,9 +39,37 @@ export const getDetail = async (id,access_token,orderCode) => {
 
 };
 
-export const changeStatus = async (id,access_token,data) => {
-  console.log(data)
-  const res = await axiosJwt.patch(`${process.env.REACT_APP_API_URL}/order/my-order/detail/change-status/${id}`
+export const cancelled = async (id,access_token,data) => {
+
+  const res = await axiosJwt.patch(`${process.env.REACT_APP_API_URL}/order/my-order/detail/cancelled/${id}`
+     ,data,{
+      headers: {
+      Authorization: `Bearer ${access_token}`
+    }
+  });
+  return res.data;
+
+};
+
+
+export const getAll = async (access_token,page,limit,search,filters) => {
+  const {status,startDate,endDate,paymentMethod}=filters;
+  const params={page,limit,search,status,startDate,endDate,paymentMethod};
+  const res = await axiosJwt.get(`${process.env.REACT_APP_API_URL}/order/getall`
+     ,{
+      params,
+      headers: {
+      Authorization: `Bearer ${access_token}`
+    }
+  });
+  return res.data;
+
+};
+
+
+
+export const updateStatus = async (data,access_token) => {
+  const res = await axiosJwt.patch(`${process.env.REACT_APP_API_URL}/order/update-status`
      ,data,{
       headers: {
       Authorization: `Bearer ${access_token}`

@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Pagination } from 'antd';
 import "./MyOrderComponent.scss"
 import { useNavigate } from 'react-router-dom';
+import { getStatusLabel } from '../../utils/orderStatus';
 const MyOrderComponent = () => {
   const user=useSelector((state)=> state.user)
   const [page, setPage] = useState(1);
@@ -18,15 +19,7 @@ const MyOrderComponent = () => {
   
   const myOrder=data?.data
 
-  const statusOrder= {
-    pending: 'Chờ xác nhận',
-    confirmed: 'Đã xác nhận',
-    shipping: 'Đang giao hàng',
-    completed: 'Giao hàng thành công',
-    cancelled: 'Đã hủy',
-    refund_pending:'Đang chờ xử lý hoàn tiền',
-    refunded: 'Đã hoàn tiền thành công'
-  }
+
 
   return (
     <div className='my_order'>
@@ -52,7 +45,7 @@ const MyOrderComponent = () => {
                                 <td>{item.name}</td>
                                 <td>{new Date(item.createdAt).toLocaleDateString('vi-VN')}</td>
                                 <td >
-                                    <span class={`status_badge ${item.status}`}>{statusOrder[item.status]}</span>
+                                    <span class={`status_badge ${item.status}`}>{getStatusLabel(item.status)}</span>
                                 </td>
                                 <td >{item.finalPrice.toLocaleString()}₫</td>
                                 <td >

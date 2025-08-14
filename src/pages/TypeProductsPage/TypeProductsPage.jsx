@@ -77,7 +77,6 @@ const TypeProductsPage = () => {
   }
   else if (!state&&slug==='favorite'){
     state=`Sản phẩm yêu thích`
-    console.log('favorite', productsFavorite?.data)
     productDataRender=productsFavorite?.data;
   }
 

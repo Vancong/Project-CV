@@ -96,7 +96,6 @@ return (
                     if (route.isAdminOnly && !isUserAdmin) {
                         ischeckAuth = false; 
                     }
-                    console.log(user,ischeckAuth)
                     return (
                       <Route key={route.path} path={route.path} element= {
                         ischeckAuth ? (

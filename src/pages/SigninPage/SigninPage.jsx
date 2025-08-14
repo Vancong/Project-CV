@@ -82,7 +82,7 @@ const SigninPage = () => {
   const handlDetailCart = async (id, access_token) => {
     const res = await CartService.getDetail(id, access_token);
     const items = [...res.data||[]];
-    console.log(res?.data)
+
     dispatch(setCart({ items, total: res?.total||0 }));
   };
 

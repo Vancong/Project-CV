@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import LoadingComponent from "../LoadingComponent/LoadingComponent"
 import { useMutationHook } from '../../hooks/useMutationHook'
 import { useQueryClient } from '@tanstack/react-query';
+import { getStatusLabel } from '../../utils/orderStatus'
 
 const OrderDetailComponent = () => {
     const user=useSelector((state)=>state.user)
@@ -23,40 +24,32 @@ const OrderDetailComponent = () => {
     const addres=`${orderDeatil?.address?.ward}, ${orderDeatil?.address?.district},
     ${orderDeatil?.address?.province}`;
 
-    const mutationChangeStatus= useMutationHook(async ({id,access_token,data})=>{
+    const mutationCancelled= useMutationHook(async ({id,access_token,data})=>{
         console.log(id,access_token,data)
-        return await OrderService.changeStatus(id,access_token,data)
+        return await OrderService.cancelled(id,access_token,data)
     })
-    const {isPending:isPendingChangeStatus,isSuccess:isSuccessPending,data: dataChangeStatus}=mutationChangeStatus;
+    const {isPending:isPendingCancelled,isSuccess:isSuccessCancelled,data: dataCancelled}=mutationCancelled;
     
     useEffect(()=>{
-        if(dataChangeStatus?.status==='OK'&&isSuccessPending){
+        if(dataCancelled?.status==='OK'&&isSuccessCancelled){
               queryClient.invalidateQueries(['order-detail']);
         }
-    },[isSuccessPending,dataChangeStatus])
+    },[isSuccessCancelled,dataCancelled])
     const canCancel = orderDeatil?.status === 'confirmed' || orderDeatil?.status === 'pending';
     const handleCancel= () =>{
         let status='cancelled'
-            if(data.isPaid) {
+            if(orderDeatil.isPaid) {
                 status='refund_pending';
             }
             const data={
                 orderCode,
                 status
             }
-        mutationChangeStatus.mutate({id:user?.id,access_token:user?.access_token,data});
+        mutationCancelled.mutate({id:user?.id,access_token:user?.access_token,data});
        
     }
 
-    const statusOrder= {
-        pending: 'Chờ xác nhận',
-        confirmed: 'Đã xác nhận',
-        shipping: 'Đang giao hàng',
-        completed: 'Giao hàng thành công',
-        cancelled: 'Đã hủy',
-        refund_pending:'Đang chờ xử lý hoàn tiền',
-        refunded: 'Đã hoàn tiền thành công'
-    }
+
   return (
     <LoadingComponent isPending={isLoading}>
         {orderDeatil&&(
@@ -67,7 +60,7 @@ const OrderDetailComponent = () => {
                     <div className="left">
                         <p><strong>Ngày đặt hàng:</strong>{new Date(orderDeatil.createdAt).toLocaleDateString('vi-VN')}</p>
                         <p><strong>Trạng thái:</strong> <span className={`status_badge ${orderDeatil.status}`}>
-                            { statusOrder[orderDeatil.status]} </span>
+                            {getStatusLabel(orderDeatil.status)} </span>
                         </p>
                         <p><strong>Thanh toán:</strong> <span className="payment_method">{orderDeatil.paymentMethod}</span></p>
                         {orderDeatil?.paidAt&&(
@@ -133,13 +126,13 @@ const OrderDetailComponent = () => {
                 </div>
 
                 <div className='btn_action'>
-                   <LoadingComponent isPending={isPendingChangeStatus} >
-                        <div  className={`btn cancel ${(isPendingChangeStatus || !canCancel) ? 'disabled' : ''}`}
+                   <LoadingComponent isPending={isPendingCancelled} >
+                        <div  className={`btn cancel ${(isPendingCancelled || !canCancel) ? 'disabled' : ''}`}
                             onClick={() => {
                                 if (canCancel) handleCancel();
                             }}
                         >
-                                {isPendingChangeStatus ? 'Đang hủy...' : 'Hủy đơn hàng'}
+                                {isPendingCancelled ? 'Đang hủy...' : 'Hủy đơn hàng'}
                         </div>
                    </LoadingComponent>
                     <div className='btn contact'>

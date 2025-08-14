@@ -5,13 +5,12 @@ import { useState } from 'react';
 const TableComponents = (props) => {
 
   const {selectionType= 'checkbox',data=[],columns=[],isLoading=false,
-  handleDeleteMany=false }=props;
+  handleDeleteMany=false,type=null }=props;
   const [rowSelectedKeys,setRowSelectedKeys]=useState([]);
   
   const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
       setRowSelectedKeys(selectedRowKeys);
-      console.log(selectedRowKeys)
   },
   // getCheckboxProps: record => ({
   //   disabled: record.name === 'Disabled User', 
@@ -44,7 +43,7 @@ const TableComponents = (props) => {
         </div>
       )}
       <Table 
-            rowSelection={{ type: selectionType, ...rowSelection }}
+            rowSelection={type==='adminOrder'?null: { type: selectionType, ...rowSelection }}
             columns={columns}
             dataSource={data}
             {...props}

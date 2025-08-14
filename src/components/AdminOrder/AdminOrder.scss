@@ -1,0 +1,40 @@
+.admin_order {
+     .status_badge {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #fff;
+        text-align: center;
+        min-width: 120px;
+    }
+
+    .pending {
+        background-color: #f59e0b; 
+    }
+
+    .confirmed {
+        background-color: #10b981; 
+    }
+
+    .shipping{
+        background-color: #3b82f6;
+    }
+
+    .cancelled {
+        background-color: #ef4444; 
+    }
+
+    .refund_pending {
+        background-color: #fbbf24; 
+    }
+
+    .refunded {
+        background-color: #6ee7b7; 
+    }
+
+    .completed{
+        background-color: #16a34a;
+    }
+}
