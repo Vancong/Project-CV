@@ -20,7 +20,7 @@ const OrderDetailModal = ({ isModalOpen, orderDetail,setIsModalOpen }) => {
     shipping: [{ label: "Giao hàng thành công", value: "completed" }],
     completed: [],
     cancelled: [],
-    refund_pending: [{label: "Đang hoàn tiền", value: "refunded" }],
+    refund_pending: [{label: "Đã hoàn tiền", value: "refunded" }],
     refunded: []
 };
 

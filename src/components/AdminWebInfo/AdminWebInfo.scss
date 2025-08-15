@@ -1,0 +1,29 @@
+.admin_websiteInfo {
+    width: 85%;
+    margin: 0 auto;
+
+    h1 {
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 20px; 
+    }
+
+    .ant-form-item {
+        margin-bottom: 16px;
+    }
+
+    .ant-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 2px;
+        background: #fafafa;
+        text-align: center;
+        padding: 20px;
+        cursor: pointer;
+    }
+
+    .social_media_title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 20px 0 10px;
+    }
+}

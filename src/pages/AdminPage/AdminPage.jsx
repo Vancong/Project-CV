@@ -12,6 +12,7 @@ import AdminNote from '../../components/AdminNote/AdminNote';
 import AdminNoteGroup from '../../components/AdminNoteGroup/AdminNoteGroup';
 import AdminVoucher from '../../components/AdminVoucher/AdminVoucher';
 import AdminOrder from '../../components/AdminOrder/AdminOrder';
+import AdminWebInfo from '../../components/AdminWebInfo/AdminWebInfo';
 const AdminPage = () => {
 const items = [
 
@@ -19,12 +20,10 @@ const items = [
   getItem('Mã giảm giá', 'voucher',<BarcodeOutlined />),
   getItem('Sản phẩm', 'product', <AppstoreOutlined />),
   getItem('Người dùng', 'user', <UserOutlined />,),
-  getItem('Navigation Three1', 'sub4', <SettingOutlined />),
   getItem('Thương Hiệu', 'brand',<RadarChartOutlined />),
   getItem('Note ', 'note',<FireOutlined />),
   getItem('Nhóm hương', 'note-group',<UngroupOutlined />),
-  
-  // getItem('Navigation Three3', 'sub6', <SettingOutlined />),
+  getItem('Thông tin website', 'webinfo', <SettingOutlined />),
   // getItem('Navigation Three4', 'sub7', <SettingOutlined />)
 ]
   const rootSubmenuKeys=['user','product']
@@ -45,6 +44,11 @@ const items = [
         return (
           <AdminProduct />
 
+        )
+
+      case('webinfo'):
+        return(
+          <AdminWebInfo />
         )
 
       case ('voucher'):
@@ -87,6 +91,9 @@ const items = [
             width:256,
             boxShadow:'1px 1px 2px #ccc',
             height:'calc(100vh - 50px)',
+            position: 'fixed',
+            left: 0,
+            top: 90, 
 
           }}
           items={items}
