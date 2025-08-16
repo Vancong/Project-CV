@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { alertConfirm,alertError,alertSuccess } from '../../utils/alert';
 import *as PaymentService from "../../services/Payment.Service.js";
+import getDiscountPrice from '../../utils/getDiscountPrice.js';
 
 const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymentMethod ,isValidForm}) => {
   const navigate=useNavigate();
@@ -66,8 +67,12 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
 
   useEffect(() => {
     if (!cartItems || cartItems.length === 0) return;
-
-    let total = cartItems.reduce((sum, item) => {
+    const updatedItems= cartItems?.map(item =>{
+        const discountPrice=getDiscountPrice(item.price,item.product.discount);
+        console.log(discountPrice)
+        return {...item,price: discountPrice}
+    })
+    let total = updatedItems.reduce((sum, item) => {
       return sum + item.quantity * item.price;
     }, 0);
     setCartTotal(total);
@@ -76,7 +81,6 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
     if (total >= 1000000) {
       shipping = 0;
     }
-
     let discount = 0;
     if (selectedVoucher) {
       if (selectedVoucher.discountType === "percentage") {
@@ -165,7 +169,7 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
                               verticalAlign: 'middle', 
                               fontSize: '18px' 
                             }}>
-                                {(item.quantity*item.price).toLocaleString()}₫ 
+                                {(getDiscountPrice(item.quantity*item.price,item.product.discount)).toLocaleString()}₫ 
                             </td>
                         </tr>
                       )

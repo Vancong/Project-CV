@@ -18,13 +18,15 @@ import { addToCart } from '../../redux/slices/CartSlice';
 import CartDrawerComponent from '../CartDrawerComponent/CartDrawerComponent';
 import *as FavoriteService from "../../services/Favorite.Service"
 import {toggleFavorite} from "../../redux/slices/FavoriteSlice"
-
+import {alertError, alertSuccess} from "../../utils/alert"
+import getDiscountPrice from '../../utils/getDiscountPrice';
 const ProductDetailsCompoent = ({slug}) => {
   const [currentSize, setCurrentSize] = useState(null);
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [quantity, setQuantity] = useState(1); 
   const user=useSelector(state => state.user);
-  const productFavorites=useSelector(state =>state.favorite)
+  const productFavorites=useSelector(state =>state.favorite);
+  const cart=useSelector(state => state.cart)
   const navigate=useNavigate();
   const location=useLocation();
   const dispatch=useDispatch();
@@ -88,6 +90,12 @@ const ProductDetailsCompoent = ({slug}) => {
       if(!currentSize) {
           return;
       }
+      const checkCountInStock= product.sizes.find(item => item.volume===currentSize.volume);
+      const productCart=cart?.items?.find(item => item.product._id===product._id&&item.volume===currentSize.volume)
+      if(checkCountInStock.countInStock===0|| productCart?.quantity+quantity>checkCountInStock.countInStock) {
+        alertError(`Thất bại. Chỉ còn ${checkCountInStock.countInStock} sản phẩm `);
+        return;
+      }
       const data={
         userId: user.id,
         productId:product._id,
@@ -134,7 +142,7 @@ const ProductDetailsCompoent = ({slug}) => {
   return (
     <LoadingComponent isPending={isLoading}>
       <Row >
-        <CartDrawerComponent open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} />
+        <CartDrawerComponent  open={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} />
         <Col span={10}>
           <SliderComponent arrImages={product?.images||[]} autoplay={false} />
         </Col>
@@ -142,8 +150,24 @@ const ProductDetailsCompoent = ({slug}) => {
           <div className='content_productDetail'>
             <h1 className='title_productDetail'>{product?.name}</h1>
 
-            <p className='price_productDetail'>
-              {currentSize ? Fomater(currentSize.price) : 'Chọn dung tích'}
+           <p className='price_productDetail'>
+              {currentSize ? (
+                product.discount > 0 ? (
+                  <div className='priceDiscount'>
+                    <p className="old_price">{Fomater(currentSize.price)}</p> 
+                    <p className="new_price">
+                      {Fomater(
+                        getDiscountPrice(currentSize.price,product.discount)
+                      )}
+                    </p>
+                    
+                  </div>
+                ) : (
+                  Fomater(currentSize.price)
+                )
+              ) : (
+                'Chọn dung tích'
+              )}
             </p>
 
 
@@ -151,14 +175,23 @@ const ProductDetailsCompoent = ({slug}) => {
               Dung tích (ml): <span>{ currentSize?.volume ?`${currentSize?.volume }ml`: 'Chưa chọn'}</span>
             </label>
 
-            <div className='sizes'>
-              {product?.sizes?.map(item => (
-                <div key={item} onClick={() => onClick(item)}
-                    className={`size ${currentSize?._id === item._id ? 'active' : ''}`} 
-                >
-                  {item.volume}ml - {Fomater(item.price)}
-                </div>
-              ))}
+              <div className="sizes">
+                {product?.sizes?.map(size => {
+                  const finalPrice = product.discount
+                    ? size.price * (1 - product.discount / 100)
+                    : size.price;
+
+                  return (
+                    <div
+                      key={size._id}
+                      onClick={() => onClick(size)}
+                      className={`size ${currentSize?._id === size._id ? 'active' : ''}`}
+                    >
+                      {size.volume}ml - {Fomater(finalPrice)}
+                      
+                    </div>
+                  );
+                })}
             </div>
 
             <div className='quantity'>

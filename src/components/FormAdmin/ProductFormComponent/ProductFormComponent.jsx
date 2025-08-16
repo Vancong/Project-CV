@@ -70,16 +70,23 @@ const ProductForm = ({form,fileList,setFileList,onFinish,isLoading,isFormSubmit,
               <div key={key} style={{ display: 'flex', gap: 4, marginBottom: 10 }}>
                 <Form.Item 
                   {...restField}
-                  name={[name, 'volume']}
-                  rules={[{ required: true, message: 'Nhập dung tích' }]}
-                  style={{ marginBottom: 0 }}
+                    label="Dung tích (ml)"
+                    labelCol={{ span: 24 }}
+                    wrapperCol={{ span: 24 }}
+                    name={[name, 'volume']}
+                    rules={[{ required: true, message: 'Nhập dung tích' }]}
+                    style={{ marginBottom: 0 }}
                 >
                   <InputComponent style={{width:140}} placeholder="Dung tích (ml)" type="number" min={0} />
                 </Form.Item>
 
                  <Form.Item
-                           name={[name, 'price']}
+                          name={[name, 'price']}
+                          label="Giá tiền"
                           rules={[{ required: true, message: 'Vui lòng nhập giá tiền' }]}
+                          labelCol={{ span: 24 }}
+                         wrapperCol={{ span: 24 }}
+
                   >
                     <InputNumber
                         style={{ width: 140 }}
@@ -99,12 +106,29 @@ const ProductForm = ({form,fileList,setFileList,onFinish,isLoading,isFormSubmit,
                 </Form.Item>
                 <Form.Item
                   {...restField}
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                  label="Tồn kho"
                   name={[name, 'countInStock']}
                   rules={[{ required: true, message: 'Nhập tồn kho' }]}
                   style={{ marginBottom: 0, marginRight: 0 }}
                 >
                   <InputComponent style={{width:140}} placeholder="Tồn kho" type="number" min={0} />
                 </Form.Item>
+
+                {mode==='update'&&(
+                   <Form.Item
+                      {...restField}
+                      labelCol={{ span: 24 }}
+                      wrapperCol={{ span: 24 }}
+                      label="Số lượng đã bán"
+                      name={[name, 'sold']}
+                      rules={[{ required: true, message: 'Số lượng đã bán' }]}
+                      style={{ marginBottom: 0, marginRight: 0 }}
+                    >
+                        <InputComponent disabled  style={{width:140}} placeholder="Số lượng đã bán" type="number" min={0} />
+                    </Form.Item>
+                )}
 
                 <Button danger onClick={() => remove(name)}>x</Button>
               </div>

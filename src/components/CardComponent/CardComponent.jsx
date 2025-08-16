@@ -12,6 +12,8 @@ import CartDrawerComponent from '../CartDrawerComponent/CartDrawerComponent'
 import { addToCart } from '../../redux/slices/CartSlice'
 import *as FavoriteService from "../../services/Favorite.Service"
 import {toggleFavorite} from "../../redux/slices/FavoriteSlice"
+import {alertError} from "../../utils/alert"
+import getDiscountPrice from '../../utils/getDiscountPrice'
 const CardComponent = (props) => {
 
   const {description,images=[],name,sizes=[],selled,slug,product,state}=props;
@@ -20,8 +22,10 @@ const CardComponent = (props) => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const user=useSelector(state => state.user);
   const productFavorites=(useSelector((state)=> state.favorite));
+  const cart=useSelector(state => state.cart)
   const dispatch=useDispatch();
 
+  
   
   const handleDetailProduct=(slug) =>{
     navigate(`/product-details/${slug}`,{state:{ category:state,product: name,slugCt:location.pathname}})
@@ -32,11 +36,17 @@ const CardComponent = (props) => {
          return await CartService.create(id,access_token,data);
   }) 
 
-  const handlAddCart= () =>{
+  const handlAddCart= (type="") =>{
     if(!user.access_token) {
       navigate('/sign-in',{state:location.pathname})
     }
     else {
+      const checkCountInStock= product.sizes.find(item => item.volume===sizes[0].volume);
+      const productCart=cart?.items?.find(item => item.product._id===product._id&&item.volume===sizes[0].volume)
+      if(checkCountInStock.countInStock===0||checkCountInStock.countInStock<productCart?.quantity+1) {
+        alertError(`Thất bại chỉ còn ${checkCountInStock.countInStock} sản phẩm `);
+        return false;
+      }
       const data={
         userId: user.id,
         productId:product._id,
@@ -44,21 +54,31 @@ const CardComponent = (props) => {
         price:sizes[0].price,
         quantity: 1,
       }
-      console.log(data)
       mutationAddCart.mutate({id:user?.id,access_token: user.access_token,data});
-
+      
+      let price= sizes[0].price;
+      if(product.discount>0) {
+        price=getDiscountPrice(price,product.discount)
+      }
+      
       dispatch(addToCart({
         product:product,
         quantity:1,
         volume:sizes[0].volume,
-        price: sizes[0].price,
+        price:price,
       }));
-      setIsOpenDrawer(true);
+      if(type!=="navigateCart"){
+          setIsOpenDrawer(true);
+      }
+    
     }
   }
   const handleBuy= () =>{
-    handlAddCart();
-    navigate('/cart')
+    const result= handlAddCart("navigateCart");
+    if(result!==false) {
+       navigate('/cart')
+    }
+   
   }
 
   const handleFavorite =async () => {
@@ -109,7 +129,22 @@ const CardComponent = (props) => {
         <div>
               <p className='product_title'>{name}</p>
               <p className='product_description'>{description}</p>
-              <p className='product_price'>{Fomater(sizes.length>0&&sizes[0].price)}</p>
+              
+       
+                <p className='product_price'>
+                  {product.discount > 0 ? (
+                    <>
+                      <p className="old_price">{Fomater(sizes[0].price)}</p>  
+                      <p className="new_price">
+                          {Fomater(
+                              getDiscountPrice(sizes[0].price,product.discount)
+                            )}
+                      </p>                           
+                    </>
+                  ) : (
+                    Fomater(sizes[0].price)
+                  )}
+                </p>
         </div>
       </Card>
     </>

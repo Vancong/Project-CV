@@ -37,7 +37,6 @@ const CartPage = () => {
     if(selectedVoucher) {
         if(selectedVoucher.discountType==='fixed'){
             discount=selectedVoucher.discountValue;
-             console.log('if',discount)
         }
         else {
             discount= selectedVoucher.discountValue/100*totalPrice;

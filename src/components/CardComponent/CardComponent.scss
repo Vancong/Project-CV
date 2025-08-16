@@ -1,8 +1,6 @@
 .card_item{
     position: relative;
-    min-height: 350px;
-    max-height: 470px;
-    height: 100%;
+    height: 450px;
     border: 1.6px solid #E2E2E2;
     border-radius: 20px;
     overflow: hidden;
@@ -43,6 +41,16 @@
 
     }
 
+    .old_price{
+        text-decoration: line-through;
+        text-decoration-thickness: 1.5px;
+        
+    }
+    .new_price{
+        color:#e30613 ;
+        font-size: 22px;
+        margin-top: -20px;
+    }
     
 // product_order
  

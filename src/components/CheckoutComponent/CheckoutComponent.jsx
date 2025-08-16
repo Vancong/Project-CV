@@ -10,13 +10,15 @@ import { useMutationHook } from '../../hooks/useMutationHook';
 import *as OrderService from "../../services/Order.Service";
 import { clearCart } from '../../redux/slices/CartSlice';
 import { useNavigate } from 'react-router-dom';
+import { alertError } from '../../utils/alert';
+
 
 const CheckoutComponent = () => {
     const user=useSelector((state)=>state.user);
     const dispatch=useDispatch();
     const [isValidForm, setIsValidForm] = useState(false);
     const navigate=useNavigate();
-    const [orderId, setOrderId] = useState(null);
+    const [cartState, setCartState] = useState([]);
     const [fullAddress, setFullAddress] = useState({
         province: null,
         district: null,
@@ -35,7 +37,7 @@ const CheckoutComponent = () => {
         totalPrice:0,
         finalPrice:0,
         discountCode:null,
-        discoutValue:0
+        discountValue:0
     })
 
     const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -52,6 +54,40 @@ const CheckoutComponent = () => {
         queryKey: ['cart'],
         queryFn: ()=> getCart(user?.id,user?.access_token) ,
     });
+
+    useEffect(() => {
+        if (!cartItems) return;
+
+        let newCart = [...cartItems];
+
+
+        newCart = newCart.filter(item => {
+            const size = item.product.sizes.find(size => size.volume === item.volume);
+            if (size.countInStock === 0) {
+                alertError(`Sản phẩm ${item.product.name} (${item.volume}) đã hết hàng và bị xóa khỏi giỏ.`);
+                return false; 
+            }
+            return true;
+        });
+
+
+        newCart = newCart.map(item => {
+            const size = item.product.sizes.find(size => size.volume === item.volume);
+
+            if (size && size.countInStock < item.quantity) {
+                alertError(`Chỉ còn ${size.countInStock} sản phẩm ${item.product.name}`);
+                return {
+                    ...item,
+                    quantity: size.countInStock
+                };
+            }
+            return item;
+        });
+
+
+        setCartState(newCart);
+    }, [cartItems]);
+
   
 
     const validateForm = () => {
@@ -90,7 +126,7 @@ const CheckoutComponent = () => {
           isSuccess: isSuccessOrder,data:dataOrder}=muatationOrder;
 
     useEffect( () =>{
-        console.log(dataOrder?.data)
+
         if(dataOrder?.status==='OK'){
             const handleClearCart = async () => {
                 const access_token = user?.access_token;
@@ -113,14 +149,17 @@ const CheckoutComponent = () => {
 
     },[isSuccessOrder,dataOrder])
     
-    useEffect(() => {
-        setIsValidForm(validateForm());
-    }, [formData, fullAddress]);
+        useEffect(() => {
+            setIsValidForm(validateForm());
+        }, [formData, fullAddress]);
 
     const handleOrder = (updateDataPay=null) => {
         if (!validateForm()) return;
         
-        const orderItems = cartItems?.map((item) => ({
+        if (!cartState || cartState.length === 0) {
+                return alertError("Giỏ hàng trống");
+        }
+        const orderItems = cartState?.map((item) => ({
             product: item.product._id,
             quantity: item.quantity,
             volume: item.volume,
@@ -189,7 +228,7 @@ const CheckoutComponent = () => {
 
         </div>
 
-        <OrderSummary cartItems={cartItems} handleOrder={handleOrder} 
+        <OrderSummary cartItems={cartState} handleOrder={handleOrder} 
                       setOrderSummary={setOrderSummary}
                       orderSummary={orderSummary}
                       type='checkout'

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { increaseQuantity,decreaseQuantity,removeCart } from '../../redux/slices/CartSlice';
 import *as CartService from "../../services/Cart.Service"
 import { useQueryClient } from '@tanstack/react-query';
+import {alertError} from "../../utils/alert"
 
 const CartDrawerComponent = ({ open, onClose }) => {
   const cartItems = useSelector(state => state.cart.items);
@@ -26,9 +27,15 @@ const CartDrawerComponent = ({ open, onClose }) => {
       volume,
       userId: user?.id
     }
-    await CartService.increaseQuantity(user?.id,user?.access_token,data);
-    dispatch(increaseQuantity({productId,volume}));
-    queryClient.invalidateQueries(['cart']);
+
+      try {
+        await CartService.increaseQuantity(user?.id, user?.access_token, data);
+        dispatch(increaseQuantity({ productId, volume }));
+        queryClient.invalidateQueries(['cart']);
+      } catch (err) {
+            alertError("Thất bại",err.response?.data?.message || "Có lỗi xảy ra");
+      }
+  
   };
 
   const handleDecrease =async (productId, volume) => {

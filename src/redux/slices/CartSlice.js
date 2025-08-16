@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+import getDiscountPrice from '../../utils/getDiscountPrice';
 const initialState = {
   items: [], 
   totalPrice: 0,
@@ -11,15 +11,19 @@ const CartSlice = createSlice({
   initialState,
   reducers: {
     setCart: (state, action) => {
-       state.items = action.payload?.items||[]; 
-       state.total=action.payload?.total;
-       state.totalPrice = state.items.reduce((total, item) => {
-          return total + item.price * item.quantity;
-        }, 0);
+      state.items = (action.payload?.items || []).map(item => {
+        const discountPrice = getDiscountPrice(item.price, item.product.discount);
+        return { ...item, price: discountPrice };
+      });
+      state.total = action.payload?.total || 0;
+      state.totalPrice = state.items.reduce((total, item) => total + item.price * item.quantity, 0);
     },
     addToCart: (state, action) => {
       const { product, quantity, volume, price } = action.payload;
-
+      const discountPrice = getDiscountPrice(
+        product.sizes.find(size => size.volume === volume)?.price || 0,
+        product.discount
+      );
       const checkItem = state.items.find(
         item => item.product._id === product._id && item.volume === volume
       );
@@ -28,7 +32,7 @@ const CartSlice = createSlice({
         checkItem.quantity += quantity;
         state.totalPrice+=quantity*checkItem.price;
       } else {
-        state.items.push({ product, quantity, volume, price });
+        state.items.push({ product, quantity, volume, price:discountPrice});
         state.total+=1;
         console.log(state.total)
         state.totalPrice+=quantity*price;

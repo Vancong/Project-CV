@@ -5,6 +5,7 @@ import *as CartService from "../../services/Cart.Service";
 import { increaseQuantity,decreaseQuantity,removeCart } from '../../redux/slices/CartSlice';
 import "./CartTableComponent.scss"
 import { useDispatch, useSelector } from 'react-redux';
+import {alertError} from "../../utils/alert"
 const CartTableComponent = ({ cartItems, onIncrease, onDecrease, onRemove }) => {
     const dispatch=useDispatch();
     const user=useSelector((state)=> state.user)
@@ -14,8 +15,13 @@ const CartTableComponent = ({ cartItems, onIncrease, onDecrease, onRemove }) => 
         volume,
         userId: user?.id
       }
-      await CartService.increaseQuantity(user?.id,user?.access_token,data);
-      dispatch(increaseQuantity({productId,volume}));
+      try {
+        await CartService.increaseQuantity(user?.id,user?.access_token,data);
+        dispatch(increaseQuantity({productId,volume}));
+      } catch (err) {
+        alertError("Thất bại",err.response?.data?.message || "Có lỗi xảy ra");
+      }
+      
     };
   
     const handleDecrease =async (productId, volume) => {
