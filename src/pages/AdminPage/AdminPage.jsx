@@ -1,7 +1,7 @@
 import { Button, Menu } from 'antd'
 import React, { useState } from 'react'
 import {UserOutlined,  AppstoreOutlined, 
-  SettingOutlined,RadarChartOutlined,FireOutlined,BarcodeOutlined,ShopOutlined  ,UngroupOutlined} from '@ant-design/icons';
+  SettingOutlined,RadarChartOutlined,FireOutlined,BarcodeOutlined,ShopOutlined,BarChartOutlined ,UngroupOutlined} from '@ant-design/icons';
 import { getItem } from '../../utils/menuUtils';
 import HeaderCompoent from '../../components/HeaderComponent/HeaderComponent';
 import AdminUser from '../../components/AdminUser/AdminUser';
@@ -13,9 +13,10 @@ import AdminNoteGroup from '../../components/AdminNoteGroup/AdminNoteGroup';
 import AdminVoucher from '../../components/AdminVoucher/AdminVoucher';
 import AdminOrder from '../../components/AdminOrder/AdminOrder';
 import AdminWebInfo from '../../components/AdminWebInfo/AdminWebInfo';
+import AdminStats from '../../components/AdminStats/AdminStats';
 const AdminPage = () => {
 const items = [
-
+  getItem('Thống kê', 'stats', <BarChartOutlined />),
   getItem('Quản lý đơn hàng', 'order', <ShopOutlined />),
   getItem('Mã giảm giá', 'voucher',<BarcodeOutlined />),
   getItem('Sản phẩm', 'product', <AppstoreOutlined />),
@@ -24,12 +25,15 @@ const items = [
   getItem('Note ', 'note',<FireOutlined />),
   getItem('Nhóm hương', 'note-group',<UngroupOutlined />),
   getItem('Thông tin website', 'webinfo', <SettingOutlined />),
-  // getItem('Navigation Three4', 'sub7', <SettingOutlined />)
+
 ]
   const rootSubmenuKeys=['user','product']
   const [keySelected,setKeySelected]= useState('');
   const renderPage= (key) =>{
     switch(key) {
+
+      case ('stats'):
+        return <AdminStats />
       case ('user'):
         return (
           <AdminUser />
@@ -39,6 +43,7 @@ const items = [
       return (
         <AdminOrder />
       )
+
     
       case ('product'):
         return (
