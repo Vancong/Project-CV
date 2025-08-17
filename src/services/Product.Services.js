@@ -9,6 +9,7 @@ export const getAllProduct=async ({page=1,limit=10,key=null,value=null, search='
     params.key=key;
     params.value=value
   }
+  if(filters?.status) params.status=filters.status
   if(filters?.discount) params.discount=true;
   if (filters?.gender) params.gender = filters.gender;
   if (filters?.price) {

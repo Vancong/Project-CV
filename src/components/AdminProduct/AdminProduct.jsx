@@ -22,6 +22,7 @@ const AdminProduct = () => {
   const [productData, setProductData] = useState(null);
   const [fileListCreate, setFileListCreate] = useState([]);
   const [fileListUpdate, setFileListUpdate] = useState([]);
+  const [statusFilter, setStatusFilter] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
   const limit=6;
@@ -55,8 +56,9 @@ const AdminProduct = () => {
 
   
   const { isLoading:isLoadingProducts , data: products } = useQuery({
-    queryKey: ['products', currentPage,searchText],
-    queryFn: () => ProductService.getAllProduct({page:currentPage, limit, search:searchText ,isAdmin:true}),
+    queryKey: ['products', currentPage,searchText,statusFilter],
+    queryFn: () => ProductService.getAllProduct({page:currentPage, limit, search:searchText,
+      filters:{status: statusFilter} ,isAdmin:true}),
     keepPreviousData: true
   });
 
@@ -275,17 +277,31 @@ return (
         <PlusOutlined /> Thêm
       </Button>
   
-       <ButtonInputSearch 
-        size="middle" 
-        placeholder="Tìm kiếm sản phẩm..." 
-        textButton="Tìm" 
-        bgrColorInput="#fff"
-        bgrColorButton="#1890ff"
-        textColorButton="#fff"
-        onChangeSearch={onChangeSearch}    
-        onClickSearch={onSearch}            
-        value={inputSearch}      
-      />
+      <div style={{display:'flex'}}>
+          <ButtonInputSearch 
+          size="middle" 
+          placeholder="Tìm kiếm sản phẩm..." 
+          textButton="Tìm" 
+          bgrColorInput="#fff"
+          bgrColorButton="#1890ff"
+          textColorButton="#fff"
+          onChangeSearch={onChangeSearch}    
+          onClickSearch={onSearch}            
+          value={inputSearch}      
+        />
+        <Select
+            value={statusFilter}
+            onChange={(value) => {
+              setStatusFilter(value);
+              setCurrentPage(1);
+            }}
+            style={{ width: 200, marginLeft: 20 }}
+          >
+            <Select.Option value="">Tất cả</Select.Option>
+            <Select.Option value="true">Đang hoạt động</Select.Option>
+            <Select.Option value="false">Dừng hoạt động</Select.Option>
+        </Select>
+      </div>
 
       <Modal
         title="Tạo sản phẩm"

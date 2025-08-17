@@ -2,29 +2,51 @@ import React, { useState } from 'react'
 import *as OrderService from "../../services/Order.Service"
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
-import { Pagination } from 'antd';
+import { Pagination, Select } from 'antd';
 import "./MyOrderComponent.scss"
 import { useNavigate } from 'react-router-dom';
 import { getStatusLabel } from '../../utils/orderStatus';
 const MyOrderComponent = () => {
   const user=useSelector((state)=> state.user)
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState("");
   const limit = 5;
   const navigate= useNavigate();
   const { isLoading , data } = useQuery({
-    queryKey: ['my-order',page],
-    queryFn: () => OrderService.getMyOrder(user?.id,user?.access_token,page,limit),
+    queryKey: ['my-order',page,status],
+    queryFn: () => OrderService.getMyOrder(user?.id,user?.access_token,page,limit,status),
     keepPreviousData: true
   });
   
   const myOrder=data?.data
 
+    const orderStatusOptions = [
+        { value: "", label: "Tất cả" },          
+        { value: "pending", label: "Chờ xử lý" },
+        { value: "confirmed", label: "Đã xác nhận" },
+        { value: "shipping", label: "Đang giao" },
+        { value: "completed", label: "Giao thành công" },
+        { value: "cancelled", label: "Đã hủy" },
+        { value: "refund_pending", label: "Chờ hoàn tiền" },
+        { value: "refunded", label: "Đã hoàn tiền" },
+    ];
 
+  const handleStatusChange = (value) => {
+    setStatus(value);
+    console.log(value)
+    setPage(1)
+  };
 
   return (
     <div className='my_order'>
         <h1 className='title'>Danh sách đơn hàng</h1>
-           
+          <Select
+            style={{ width: 220 }}
+            placeholder="Chọn trạng thái"
+            value={status}
+            onChange={handleStatusChange}
+            options={orderStatusOptions}
+        />
         <div className="table-container">
             <table>
                 <thead>

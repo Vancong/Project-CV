@@ -175,7 +175,7 @@ const AdminNoteGroup = () => {
   return (
     <div className='Admin_note_group'>
       <h1 className='title'>Quản lý nhóm hương</h1>
-      <Button className='btn_add' onClick={() => setIsModalOpen(true)}>
+      <Button  style={{marginBottom:20}} className='btn_add' onClick={() => setIsModalOpen(true)}>
           <PlusOutlined /> Thêm nhóm hương
       </Button>
 
@@ -259,7 +259,7 @@ const AdminNoteGroup = () => {
        </Form>
     </DrawerComponent>
 
-      <TableComponents data={dataTable} columns={columns}
+      <TableComponents style={{marginTop:30}} data={dataTable} columns={columns}
             pagination={{
             current: currentPage,
             pageSize: limit,

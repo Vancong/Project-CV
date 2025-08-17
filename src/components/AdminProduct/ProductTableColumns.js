@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Image, Popconfirm } from 'antd';
+import { Button, Image, Popconfirm, Tag } from 'antd';
 
 export const getProductTableColumns = ({ onDetail, onDelete }) => [
 
@@ -49,6 +49,15 @@ export const getProductTableColumns = ({ onDetail, onDelete }) => [
       return total;
     },
   },
+   {
+      title: 'Trạng thái',
+      dataIndex: "isActive",
+      render: (isActive) => (
+        <Tag color={isActive ? 'green' : 'volcano'}>
+          {isActive ? 'Hoạt động' : 'Dừng họa động'}
+        </Tag>
+      )
+    },
   {
     title: 'Hành động',
     key: 'actions',

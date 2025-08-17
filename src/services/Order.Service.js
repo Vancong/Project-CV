@@ -17,9 +17,11 @@ export const create = async (id,access_token,data) => {
   }
 };
 
-export const getMyOrder = async (id,access_token,page,limit) => {
+export const getMyOrder = async (id,access_token,page,limit,status) => {
+  let params= { page, limit }
+  if(status) params.status=status
   const res = await axiosJwt.get(`${process.env.REACT_APP_API_URL}/order/my-order/${id}`,{
-      params: { page, limit },
+      params,
       headers: {
       Authorization: `Bearer ${access_token}`
     }

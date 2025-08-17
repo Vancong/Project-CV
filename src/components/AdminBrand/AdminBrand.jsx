@@ -241,8 +241,8 @@ const AdminBrand = () => {
 
   return (
     <div className='Admin_brand'>
-      <h1 className='title'>Quản lý thương hiệu</h1>
-      <Button className='btn_add' onClick={() => setIsModalOpen(true)}>
+      <h1  className='title'>Quản lý thương hiệu</h1>
+      <Button style={{marginBottom:20}} className='btn_add' onClick={() => setIsModalOpen(true)}>
           <PlusOutlined /> Thêm thương hiệu
       </Button>
 
@@ -288,7 +288,7 @@ const AdminBrand = () => {
         />
       </DrawerComponent>
 
-      <TableComponents data={dataTable} columns={columns}
+      <TableComponents style={{marginTop: 30}} data={dataTable} columns={columns}
             handleDeleteManyUser={handleDeleteManyBrand}
             pagination={{
             current: currentPage,

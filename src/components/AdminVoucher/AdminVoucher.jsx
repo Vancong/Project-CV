@@ -281,7 +281,7 @@ const AdminVoucher = () => {
   return (
     <div className='admin_voucher'>
         <h1 className='title'>Quản lý mã giảm giá</h1>
-        <Button className='btn_add' onClick={() => setIsModalOpen(true)}>
+        <Button style={{marginBottom:20}} className='btn_add' onClick={() => setIsModalOpen(true)}>
             <PlusOutlined /> Thêm mã giảm giá
         </Button>
 
@@ -295,7 +295,7 @@ const AdminVoucher = () => {
           textColorButton="#fff"
           onChangeSearch={onChangeSearch}    
           onClickSearch={onSearch}            
-          value={inputSearch}      
+          value={inputSearch}   
         />
         <Modal 
             title="Thêm mã giảm giá"
@@ -321,7 +321,7 @@ const AdminVoucher = () => {
             />
         </DrawerComponent>
 
-        <TableComponents data={dataTable} columns={columns}
+        <TableComponents style={{marginTop:30}} data={dataTable} columns={columns}
             pagination={{
             current: currentPage,
             pageSize: limit,

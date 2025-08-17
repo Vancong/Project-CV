@@ -140,7 +140,7 @@ const AdminNote = () => {
     <div className='admin_order'>
       <h1 className='title'>Quản lý đơn hàng</h1>
 
-      <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
+      <div  style={{ display: 'flex', gap: 25, marginBottom: 26 }}>
         <ButtonInputSearch 
           size="middle" 
           placeholder="Nhập mã đơn hàng hoặc tên, số điện thoại..." 

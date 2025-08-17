@@ -235,7 +235,7 @@ const AdminUser = () => {
 return (
     <div className='admin_user'>
       <h1 className='title'>Quản lý người dùng</h1>
-      <Button className='btn_add' onClick={() => setIsModalOpen(true)}>
+      <Button  className='btn_add' onClick={() => setIsModalOpen(true)}>
           <PlusOutlined /> Thêm người dùng
       </Button>
 
