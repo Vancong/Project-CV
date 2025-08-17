@@ -1,0 +1,24 @@
+.product_list_section{
+    .card {
+        display: flex;
+        gap: 25px;
+        flex-wrap: wrap;
+        justify-content: center;
+
+    }
+
+    .button {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .title {
+        text-align: center;
+        padding: 70px 0;
+        font-size: 40px;
+        color: #000000;
+        font-weight: 500;
+    }
+}

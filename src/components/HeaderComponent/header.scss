@@ -4,8 +4,9 @@
 .header {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 100;
     background-color: white;
+
 }
 .header_top{
     display: flex;
@@ -27,12 +28,12 @@
     }
 }
 
-.contentPopup{
-    cursor: pointer;
-    &:hover {
-        background-color: red;
-        color: white;
-    }
+.contentPopup {
+  cursor: pointer;
+  &:hover {
+    background-color: #f5f5f5;
+    color: #000;             
+  }
 }
 
 .avt-header {
@@ -45,7 +46,7 @@
 .menu_item {
     display: flex;
     justify-content: center;
-    padding: 35px 0;
+    padding: 15px 0;
     list-style: none;
     margin: 0;
     color: #0a4f58;
@@ -59,6 +60,7 @@
     position: relative;
     cursor: pointer;
     padding: 12px 4px;
+    margin-right: 12px;
     transition: color 0.2s ease;
     font-size: 16px;
 }

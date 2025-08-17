@@ -1,5 +1,6 @@
 import axios from "axios"
 import axiosJwt from "./axiosJwt";
+import { data } from "react-router-dom";
 
 export const loginUser = async (data) => {
    try {
@@ -25,7 +26,10 @@ export const signUpUser = async (data) => {
     
   } catch (error) {
      const errResponse = error?.response?.data;
-     throw new Error(errResponse?.message || 'Lỗi khi tạo người dùng');
+      return {
+      status: 'ERR',
+      message: errResponse?.message 
+    };
    
   }
 };
@@ -131,5 +135,16 @@ export const resetPassword= async (data,access_token) =>{
         token:`Bearer ${access_token}`,
     }
   })
+  return res.data;
+}
+
+export const changePassword= async (userId,access_token,data) =>{
+  const res=  await axiosJwt.post(`${process.env.REACT_APP_API_URL}/user/change-password/${userId}`,data,{
+      headers:{
+      token:`Bearer ${access_token}`,
+    }
+  });
+
+  
   return res.data;
 }

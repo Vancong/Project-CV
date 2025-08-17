@@ -12,6 +12,7 @@ const SignUpPage = () => {
   const handleNavigateSignIn= () =>{
     navigate('/sign-in');
   }
+  const [showPassword, setShowPassword] = useState(false);
 
   const mutation=useMutationHook(
         data => UserService.signUpUser(data)
@@ -19,6 +20,7 @@ const SignUpPage = () => {
   const {data,isPending,isSuccess}= mutation;
 
   useEffect (() => {
+
     if(isSuccess&&data.status==='OK'){
       handleNavigateSignIn();
     }
@@ -61,15 +63,27 @@ const SignUpPage = () => {
           <InputFormComponent 
               className="inputAcccount" 
               placeholder="Mật khẩu" 
+              type={showPassword ? 'text' : 'password'}
               value={password} 
               onChange={handleOnchangePassword}   
           />
           <InputFormComponent 
               className="inputAcccount" 
+              type={showPassword ? 'text' : 'password'}
               placeholder="Nhập lại mật khẩu" 
               value={confirmPassword}
               onChange={handleOnchangeConfirmPassword}
           />
+           <label style={{ display: 'block', marginTop: 10,marginRight:170, cursor: 'pointer' }}>
+              <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+              style={{ marginRight: 8 }}
+              />
+              Hiện mật khẩu
+          </label>
+          
           {data?.status === "ERR" && (
               <div style={{ color: 'red', marginTop: '10px' }}>
                 {data.message}

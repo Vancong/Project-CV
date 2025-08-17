@@ -2,9 +2,14 @@ import axios from "axios";
 import axiosJwt from "./axiosJwt";
 
 
-export const getAllProduct=async ({page=1,limit=10,search='',filters,isAdmin=false}) => {
+export const getAllProduct=async ({page=1,limit=10,key=null,value=null, search='',filters={},isAdmin=false}) => {
 
   const params={page,limit,search,isAdmin};
+  if(key&&value) {
+    params.key=key;
+    params.value=value
+  }
+  if(filters?.discount) params.discount=true;
   if (filters?.gender) params.gender = filters.gender;
   if (filters?.price) {
     if (filters.price === '< 1.5 Triệu') {
@@ -23,6 +28,7 @@ export const getAllProduct=async ({page=1,limit=10,search='',filters,isAdmin=fal
   if (filters?.notes && filters?.notes?.length > 0) {
     params.notes = filters.notes.join(',');
   }
+  
 
   const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all`,{params});
   return res.data;

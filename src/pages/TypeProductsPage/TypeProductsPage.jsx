@@ -1,7 +1,7 @@
 import React, {  useState } from 'react'
 import FilterSidebarComponent from '../../components/FilterSidebarComponent/FilterSidebarComponent'
 import CardComponent from '../../components/CardComponent/CardComponent'
-import {Row,Col, Pagination} from "antd";
+import {Row,Col, Pagination, Select} from "antd";
 import './TypeProductsPage.scss';
 import { useLocation, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -19,15 +19,18 @@ const TypeProductsPage = () => {
   const {type:slug}=useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const limit=10;
+  const [sortOption, setSortOption] = useState('newProduct');
+  const [keyValue,setKeyValue]=useState({key:'createdAt',value:-1})
   const searchKeyword = useSelector(state => state.product.search);
   const user=useSelector((state)=>state.user)
-    const genderMap = {
+
+  const genderMap = {
       'Nước Hoa Nam': 'Male',
       'Nước Hoa Nữ': 'Female',
       'Nước Hoa Unisex': 'Unisex',
       'nuoc-hoa-nam': 'Male',
       'nuoc-hoa-nu': 'Female',
-      'nuoc-hoa-unisex': 'Unisex'
+      'nuoc-hoa-unisex': 'Unisex',
   };
 
   let filters = {
@@ -42,13 +45,16 @@ const TypeProductsPage = () => {
       if (filters?.gender) {
         onFilters.gender = genderMap[filters.gender];
 
-      } else if (slug !== 'loc-san-pham') {
+      } else if (slug !== 'loc-san-pham' && slug !== 'dealthom') {
         onFilters.gender = genderMap[slug];
       }
       if (filters?.price) onFilters.price = filters.price;
       if (filters?.brands?.length) onFilters.brands = filters.brands;
       if (filters?.notes?.length) onFilters.notes = filters.notes;
-
+      
+      if (slug === 'deal-thom') {
+        onFilters.discount = true; 
+      }
       return onFilters;
     };
 
@@ -56,8 +62,9 @@ const TypeProductsPage = () => {
 
 
   let { data:products, isLoading } = useQuery({
-    queryKey: ['products-type', slug,currentPage,limit,filters,searchKeyword],
-    queryFn: () => ProductService.getAllProduct({ page: currentPage, limit, filters,search:searchKeyword }),
+    queryKey: ['products-type', slug,currentPage,limit,filters,searchKeyword,keyValue],
+    queryFn: () => ProductService.getAllProduct({ page: currentPage, limit, filters,
+      search:searchKeyword,key:keyValue.key,value:keyValue.value }),
     keepPreviousData: true,
     enabled: slug !== 'favorite' 
   });
@@ -69,6 +76,21 @@ const TypeProductsPage = () => {
     keepPreviousData: true
   });
 
+
+  const onChangeValue=(value) => {
+    setSortOption(value);
+    if(value==='newProduct'){
+      setKeyValue({ key: 'createdAt', value: -1 });
+    }
+    else if (value==='price-desc'){
+      setKeyValue({ key: 'price', value: -1 });
+    }
+    else if (value==='price-asc' ){
+      setKeyValue({ key: 'price', value: 1 });
+    }
+
+    setCurrentPage(1)
+  }
   
   let productDataRender=products?.data;
 
@@ -78,6 +100,7 @@ const TypeProductsPage = () => {
   else if (!state&&slug==='favorite'){
     state=`Sản phẩm yêu thích`
     productDataRender=productsFavorite?.data;
+    productDataRender=productDataRender?.filter(item =>  item!==null)
   }
 
   return (
@@ -96,42 +119,50 @@ const TypeProductsPage = () => {
                       : state
                 }
              </h1>
+      
+
+             
             <div>
                 <Row  gutter={24} wrap style={{ paddingTop: '10px' }}>
+
                     {slug!=='search'&&slug!=='favorite' && (
                         <Col span={6} className='col_navbar'>
                           <FilterSidebarComponent slug={slug} setCurrentPage={setCurrentPage}                                               
                           />
                         </Col>
                     )}
-                  
-                    <Col span={18}  className='card'>
-                      { productDataRender?.map(product => {
-                        return(
-                          <CardComponent 
-                            key={product._id}
-                            images={product.images}
-                            name={product.name}
-                            sizes={product.sizes}
-                            selled={product.selled}
-                            slug={product.slug}
-                            state={state}
-                            product={product}
-                          />
-                        )
-                      })}
-                                                
+                    <Col span={slug==='search' || slug==='favorite' ? 24 : 18}>
+               
+                        
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px',justifyContent:'center' }}>
+                            {productDataRender?.map(product => (
+                              <CardComponent
+                                width={216}
+                                key={product._id}
+                                images={product.images}
+                                name={product.name}
+                                sizes={product.sizes}
+                                selled={product.selled}
+                                slug={product.slug}
+                                state={state}
+                                product={product}
+                              />
+                            ))}
+                        </div>   
+
                     </Col>
                 </Row>
                 
-                  <div className='pagination-wrapper'>
+                  {productDataRender?.length>0&&(
+                    <div className='pagination-wrapper'>
                       <Pagination 
                       total={products?.total}
                       current={currentPage} 
                       pageSize={limit}
                       onChange={(page) => setCurrentPage(page)}
                       />
-                  </div>
+                    </div>
+                  )}
             </div>
         </div>
       </div>

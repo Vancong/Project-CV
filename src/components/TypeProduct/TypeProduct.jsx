@@ -8,11 +8,12 @@ const TypeProduct = ({name,onClick}) => {
   const navigate=useNavigate();
   const handleNatvigateType=(type) =>{
     const slug = slugify(type, { lower: true });
-    if(slug==='trang-chu') {
-      navigate('/');
-      return;
+    let newPath = slug === 'trang-chu' ? '/' : `/type/${slug}`;
+    if (window.location.pathname === newPath) {
+      navigate(0); 
+    } else {
+      navigate(newPath, { state: type });
     }
-    navigate(`/type/${slug}`,{state: type})
   }
   return (
     <div style={{cursor:'pointer',padding:'10px 0px'}} onClick={() =>handleNatvigateType(name)}>  {name}</div>

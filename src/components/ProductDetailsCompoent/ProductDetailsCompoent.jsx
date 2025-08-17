@@ -20,6 +20,7 @@ import *as FavoriteService from "../../services/Favorite.Service"
 import {toggleFavorite} from "../../redux/slices/FavoriteSlice"
 import {alertError, alertSuccess} from "../../utils/alert"
 import getDiscountPrice from '../../utils/getDiscountPrice';
+import ProductListSection from '../ProductListSection/ProductListSection';
 const ProductDetailsCompoent = ({slug}) => {
   const [currentSize, setCurrentSize] = useState(null);
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -152,7 +153,7 @@ const ProductDetailsCompoent = ({slug}) => {
 
            <p className='price_productDetail'>
               {currentSize ? (
-                product.discount > 0 ? (
+                product?.discount > 0 ? (
                   <div className='priceDiscount'>
                     <p className="old_price">{Fomater(currentSize.price)}</p> 
                     <p className="new_price">
@@ -177,8 +178,8 @@ const ProductDetailsCompoent = ({slug}) => {
 
               <div className="sizes">
                 {product?.sizes?.map(size => {
-                  const finalPrice = product.discount
-                    ? size.price * (1 - product.discount / 100)
+                  const finalPrice = product?.discount
+                    ? size.price * (1 - product?.discount / 100)
                     : size.price;
 
                   return (
@@ -252,6 +253,21 @@ const ProductDetailsCompoent = ({slug}) => {
         </Col>
       </Row>
       {product&& <ProductTabsComponent product={product} />}
+
+      <ProductListSection 
+            title="Sản phẩm đang trong thời gian khuyến mãi" 
+            queryKey="saleProducts" 
+            keySort="discount" 
+            valueSort={-1} 
+      />
+
+          <ProductListSection 
+            title="Sản phẩm mới nhất" 
+            queryKey="newProducts" 
+            keySort="createdAt" 
+            valueSort={-1} 
+      />
+      
     </LoadingComponent>
   );
 };

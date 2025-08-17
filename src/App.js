@@ -11,12 +11,11 @@
   import { setCart } from './redux/slices/CartSlice'; 
   import { setFavoriteIds } from './redux/slices/FavoriteSlice';
   import *as FavoriteService from "./services/Favorite.Service.js";
-  
+  import ScrollToTop  from "./components/ScrollToTop/ScrollToTop.jsx"
   export function App() { 
     const dispatch=useDispatch();
     const user=useSelector((state =>state.user));
     const [isLoading,setIsLoading]=useState(true);
-
     useEffect(() => {
 
       const handlGetUserAndCart= async () =>{
@@ -46,11 +45,11 @@
       dispatch(setCart({items,total:res.total}))
     }
     
-    const handleGetUserFavorites= async(id,access_token) =>{
-      const res= await FavoriteService.getUserFavorite(id,access_token);
-      const listId= res?.data?.map((item) =>item._id)
-      dispatch(setFavoriteIds({total: res.total,productIds: listId}));
-    }
+  const handleGetUserFavorites = async (id, access_token) => {
+    const res = await FavoriteService.getUserFavorite(id, access_token);
+    const listId = res.data.filter(item => item?._id).map(item => item._id);
+    dispatch(setFavoriteIds({ total: res?.total || 0, productIds: listId }));
+  };
 
     const handleDecode = () => {
       let storeData = localStorage.getItem('access_token');
@@ -80,6 +79,7 @@ return (
 
       <div>
             <Router>
+              <ScrollToTop />
               <Routes>
                 {
                   routes.length>0&&routes.map(route =>{
@@ -110,7 +110,7 @@ return (
                     )
                   })
                 }      
-              </Routes>
+              </Routes>              
             </Router>
 
       </div>
