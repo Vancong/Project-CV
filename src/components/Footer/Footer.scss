@@ -1,0 +1,74 @@
+.footer {
+  background: #5a8d93;
+  color: white;
+  padding: 40px 0;
+  font-size: 16px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.footer-col {
+  flex: 1 1 200px;
+  min-width: 210px;
+
+  h4 {
+    margin-bottom: 12px;
+    color: #fff;
+    font-size: 16px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    li {
+      margin-bottom: 8px;
+      cursor: pointer;
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  .payment-method {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .social {
+    display: flex;
+    gap: 12px;
+    a {
+      text-decoration: none;
+      color: #ccc;
+      font-size: 20px;
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 18px;
+  border-top: 1px solid #816262;
+  font-size: 13px;
+  color: white;
+}
+
+

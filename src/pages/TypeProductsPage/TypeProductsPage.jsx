@@ -134,7 +134,7 @@ const TypeProductsPage = () => {
                     <Col span={slug==='search' || slug==='favorite' ? 24 : 18}>
                
                         
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px',justifyContent:'center' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px',justifyContent:'flex-start' }}>
                             {productDataRender?.map(product => (
                               <CardComponent
                                 width={216}

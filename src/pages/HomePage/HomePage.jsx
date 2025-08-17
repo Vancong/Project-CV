@@ -1,18 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
+
 import "./style.scss";
 import SliderComponent from '../../components/SliderComponent/SliderComponent';
-import slide1 from "../../assets/images/slide1.webp";
-import slide2 from "../../assets/images/slide2.webp";
-import slide3 from "../../assets/images/slide3.webp";
-import slide4 from "../../assets/images/slide4.webp";
-import { useQuery } from '@tanstack/react-query';
 import ProductListSection from "../../components/ProductListSection/ProductListSection";
+import Footer from '../../components/Footer/Footer';
+import { useSelector } from "react-redux";
 const HomePage = () => {
+  const websiteInfo=useSelector(state => state.websiteInfo);
 
   return (
    <>
 
-        <SliderComponent type='banner' arrImages={[slide1,slide2,slide3,slide4]} autoplay={true} />
+        <SliderComponent type='banner' arrImages={websiteInfo?.banner} autoplay={true} />
         <div className='container home_page'>
 
             <ProductListSection 
@@ -29,6 +27,9 @@ const HomePage = () => {
                 valueSort={-1} 
               />
           </div>
+
+          <Footer />
+          
    </>
   )
 }

@@ -1,3 +1,14 @@
+.custom-dropdown .ant-select-item-option {
+  padding: 0 !important;   
+  background-color: transparent !important;
+  border: none !important;
+  transition: none !important;
+}
+
+.custom-dropdown .ant-select-item-option-active {
+  background-color: transparent !important; 
+}
+
 .custom-dropdown {
    margin-top: 20px !important;
    z-index: 100; 
@@ -21,7 +32,6 @@
 
     &:hover {
         cursor: pointer;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         .search_right {
             .name {
                 span {

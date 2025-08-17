@@ -12,12 +12,14 @@
   import { setFavoriteIds } from './redux/slices/FavoriteSlice';
   import *as FavoriteService from "./services/Favorite.Service.js";
   import ScrollToTop  from "./components/ScrollToTop/ScrollToTop.jsx"
+  import *as WebSiteInfoService from "./services/websiteInfo.Service.js";
+  import { setInfo } from './redux/slices/WebSiteInfo.js';
   export function App() { 
     const dispatch=useDispatch();
     const user=useSelector((state =>state.user));
     const [isLoading,setIsLoading]=useState(true);
     useEffect(() => {
-
+      handlDetailInfoWebSite()
       const handlGetUserAndCart= async () =>{
           const  {decode,storeData}=handleDecode()|| {};
             try {
@@ -37,6 +39,7 @@
       }
       handlGetUserAndCart()
 
+
     },[])
 
     const handlDetailCart= async(id,access_token) =>{
@@ -44,6 +47,12 @@
       const items=[...res.data];
       dispatch(setCart({items,total:res.total}))
     }
+
+    const handlDetailInfoWebSite= async() =>{
+      const res= await WebSiteInfoService.getInfo();
+      dispatch(setInfo(res.data))
+    }
+    
     
   const handleGetUserFavorites = async (id, access_token) => {
     const res = await FavoriteService.getUserFavorite(id, access_token);

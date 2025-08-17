@@ -5,7 +5,8 @@ import "./Slider.scss"
 import { useNavigate } from 'react-router-dom';
 const SliderComponent = ({arrImages,autoplay,type=''}) => {
   const navigate=useNavigate();
-  if (arrImages.length === 1) {
+  
+  if (arrImages?.length === 1) {
     return (
         <Image
           src={arrImages[0]}
@@ -36,7 +37,7 @@ const SliderComponent = ({arrImages,autoplay,type=''}) => {
     <Slider {...settings}  >
         {arrImages.map(image =>{
             return <Image src={image} alt="Slider" preview={false} 
-                          width="100%" height="580px"
+                          width="100%" height="510px"
                           style={{objectFit:'cover'}} 
                           onClick={handleClick}
                           className={type ? 'click_img' :''}

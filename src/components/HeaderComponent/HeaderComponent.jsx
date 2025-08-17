@@ -24,7 +24,7 @@ const HeaderCompoent = ({isHiddenFavorite=false,isHiddenCart=false,isHiddenSearc
   const [userName,setUserName]=useState('');
   const [userAvt,setUserAvt]=useState('');
   const [selected, setSelected] = useState(null);
-
+  const websiteInfo=useSelector(state =>state.websiteInfo)
   
   const navigate =useNavigate();
   const handleNavigateLogin =() =>{
@@ -57,7 +57,7 @@ const HeaderCompoent = ({isHiddenFavorite=false,isHiddenCart=false,isHiddenSearc
     </div>
   )
   const itemsMenu=['Trang chủ','Deal thơm', 'Nước hoa nam','Nước hoa nữ',
-    'Nước hoa Unisex','Note hương','Thương hiệu','Giới thiệu'];
+    'Nước hoa Unisex','Note hương','Thương hiệu'];
  
  
       
@@ -68,7 +68,9 @@ return (
             style={{justifyContent: isHiddenSearch&& isHiddenFavorite ?'space-between': 'unset'}}
         >
           <Col span={6}>
-             <h1>VanCong88</h1>
+             <img src={websiteInfo?.logo} alt="logo" style={{width:50,height:50,objectFit:'cover',cursor:'pointer'}}
+              onClick={()=> navigate('/')}
+             />
           </Col>
           {!isHiddenSearch&&(
             <Col span={14} style={{marginRight:10,marginLeft:-100}}>

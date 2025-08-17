@@ -11,8 +11,7 @@
 .header_top{
     display: flex;
     margin: 0 120px;
-    padding-top: 30px;
-    padding-bottom: 20px;
+    padding-top: 20px;
     align-items: center;    
 
 }
@@ -46,7 +45,7 @@
 .menu_item {
     display: flex;
     justify-content: center;
-    padding: 15px 0;
+    padding: 5px 0;
     list-style: none;
     margin: 0;
     color: #0a4f58;
@@ -59,7 +58,7 @@
 .menu_item_li {
     position: relative;
     cursor: pointer;
-    padding: 12px 4px;
+    padding: 12px 8px;
     margin-right: 12px;
     transition: color 0.2s ease;
     font-size: 16px;
