@@ -2,7 +2,10 @@ import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 import * as UserService from './User.Service';
 
-const axiosJwt = axios.create();
+const axiosJwt = axios.create({
+  baseURL: process.env.REACT_APP_API_URL, 
+  withCredentials: true, 
+})
 
 axiosJwt.interceptors.request.use(
   async (config) => {

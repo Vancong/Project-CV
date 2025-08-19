@@ -73,6 +73,7 @@
     };
 
     const handlGetDetailUser= async (id,access_token) =>{
+  
       const res= await UserService.getDetailUser(id,access_token);
       dispatch(updateUser({...res?.data ,access_token}))
 
