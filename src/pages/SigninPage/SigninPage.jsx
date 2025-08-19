@@ -168,8 +168,8 @@ const SigninPage = () => {
                                     
             />
           </LoadingComponent>
-          <p style={{cursor:'pointer'}} onClick={()=> navigate('/forgot-password')}> Quên mật khẩu? </p>
-          <p>Bạn chưa có tài khoản. <span style={{cursor:'pointer'}} onClick={handleNavigateSignUp}>Đăng ký tại đây.</span> </p>
+          <p style={{cursor:'pointer',color:'#0f6ecd'}} onClick={()=> navigate('/forgot-password')}> Quên mật khẩu? </p>
+          <p>Bạn chưa có tài khoản. <span style={{cursor:'pointer',color:'#0f6ecd'}} onClick={handleNavigateSignUp}>Đăng ký tại đây.</span> </p>
         </div>
 
     </div>

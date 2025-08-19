@@ -11,6 +11,7 @@ import NavigationPathComponent from '../../components/NavigationPathComponent/Na
 import *as FavoriteService from "../../services/Favorite.Service"
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import ProductListSection from '../../components/ProductListSection/ProductListSection';
 const TypeProductsPage = () => {
 
   const location = useLocation();
@@ -134,7 +135,7 @@ const TypeProductsPage = () => {
                     <Col span={slug==='search' || slug==='favorite' ? 24 : 18}>
                
                         
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px',justifyContent:'flex-start' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px',justifyContent:'flex-start'}}>
                             {productDataRender?.map(product => (
                               <CardComponent
                                 width={216}
@@ -149,22 +150,29 @@ const TypeProductsPage = () => {
                               />
                             ))}
                         </div>   
-
+                        
+                         {productDataRender?.length>0&&(
+                          <div className='pagination-wrapper'>
+                            <Pagination 
+                            total={products?.total}
+                            current={currentPage} 
+                            pageSize={limit}
+                            onChange={(page) => setCurrentPage(page)}
+                            />
+                          </div>
+                        )}
                     </Col>
                 </Row>
                 
-                  {productDataRender?.length>0&&(
-                    <div className='pagination-wrapper'>
-                      <Pagination 
-                      total={products?.total}
-                      current={currentPage} 
-                      pageSize={limit}
-                      onChange={(page) => setCurrentPage(page)}
-                      />
-                    </div>
-                  )}
+                 
             </div>
         </div>
+        <ProductListSection 
+          title="Sản phẩm đang trong thời gian khuyến mãi" 
+          queryKey="saleProducts" 
+          keySort="discount" 
+          valueSort={-1} 
+        />
       </div>
    </LoadingComponent>
   )

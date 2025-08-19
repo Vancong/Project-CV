@@ -45,10 +45,10 @@ const ProductDetailsCompoent = ({slug}) => {
   });
 
   useEffect(() => {
-    if (product?.sizes?.length > 0 && !currentSize) {
+    if (product?.sizes?.length > 0) {
       setCurrentSize(product.sizes[0]);
     }
-  }, [product, currentSize]);
+  }, [product, slug]);
 
   const onClick = (item) => {
     setCurrentSize(item);

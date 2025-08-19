@@ -10,6 +10,7 @@ import { Button, Upload, Modal } from 'antd';
 import { alertSuccess, alertError } from '../../utils/alert';
 import { UploadOutlined } from "@ant-design/icons";
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
+import NavigationPathComponent from '../../components/NavigationPathComponent/NavigationPathComponent';
 
 const ProfilePage = () => {
   const user = useSelector(state => state.user);
@@ -86,8 +87,8 @@ const ProfilePage = () => {
     if (isSuccess && data?.status === 'OK') {
       alertSuccess('Thành Công', 'Cập nhật thành công');
     }
-    else if (isError && error?.response?.data == 'ERR') {
-      alertError('Thất bại', 'Cập nhật thất bại');
+    else if (isError) {
+      alertError('Thất bại', `${error}`);
     }
   }, [isError, isSuccess]);
 
@@ -165,162 +166,165 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className='profile-user'>
-      <h1>Thông tin người dùng</h1>
-      <LoadingComponent isPending={isPending}>
-        <div className='content-profile'>
-          <div className='wrapper-input'>
-            <label htmlFor='name'>Họ tên </label>
-            <InputFormComponent
-              id="name"
-              style={{ width: '300px' }}
-              value={formData.name}
-              onChange={(value) => handleChange(value, 'name')}
-              placeholder={'Nhập họ tên'}
-              name="name"
-            />
-          </div>
-
-          <div className='wrapper-input'>
-            <label htmlFor='email'>Email</label>
-            <InputFormComponent
-              id="email"
-              name="email"
-              style={{ width: '300px' }}
-              value={formData.email}
-              onChange={(value) => handleChange(value, 'email')}
-              placeholder={'Nhập email'}
-            />
-          </div>
-
-          <div className='wrapper-input'>
-            <label htmlFor='phone'> Số điện thoại</label>
-            <InputFormComponent
-              id="phone"
-              name="phone"
-              type="number"
-              style={{ width: '300px' }}
-              value={formData.phone}
-              onChange={(value) => handleChange(value, 'phone')}
-              placeholder={'Nhập số điện thoại'}
-            />
-          </div>
-
-          <div className='wrapper-input'>
-            <label htmlFor='address'> Địa chỉ</label>
-            <InputFormComponent
-              id="address"
-              name="address"
-              style={{ width: '300px' }}
-              value={formData.address}
-              onChange={(value) => handleChange(value, 'address')}
-              placeholder={'Nhập địa chỉ'}
-            />
-          </div>
-
-          <div className='wrapper-input'>
-            <label htmlFor='avt'> Ảnh đại diện</label>
-            <Upload
-              onChange={handleOnchangeAvt}
-              accept="image/*"
-              multiple={false}
-              maxCount={1}
-              fileList={fileList}
-              showUploadList={false}
-              beforeUpload={() => false} >
-              <Button icon={<UploadOutlined />} >Tải lên</Button>
-            </Upload>
-            {avt && (
-              <img src={avt} className='img-avt' alt="avt" />
-            )}
-          </div>
-
-
-          <Modal
-            title="Đổi mật khẩu"
-            open={isOpenModal}
-            onOk={handleChangePasswordOk}
-            onCancel={() => setIsOpenModal(false)}
-            okText="Xác nhận"
-            cancelText="Hủy"
-          >
+    <div className='container'>
+      <NavigationPathComponent category="Thông tin người dùng" />
+      <div className='profile-user'>
+        <h1>Thông tin người dùng</h1>
+        <LoadingComponent isPending={isPending}>
+          <div className='content-profile'>
             <div className='wrapper-input'>
-              <label htmlFor='oldPassword'>Mật khẩu cũ</label>
+              <label htmlFor='name'>Họ tên </label>
               <InputFormComponent
-                id="oldPassword"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Nhập mật khẩu cũ"
-                value={passwordData.oldPassword}
-                onChange={(value) => handleChangePassword(value, 'oldPassword')}
+                id="name"
+                style={{ width: '300px' }}
+                value={formData.name}
+                onChange={(value) => handleChange(value, 'name')}
+                placeholder={'Nhập họ tên'}
+                name="name"
               />
             </div>
 
             <div className='wrapper-input'>
-              <label htmlFor='newPassword'>Mật khẩu mới</label>
+              <label htmlFor='email'>Email</label>
               <InputFormComponent
-                id="newPassword"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Nhập mật khẩu mới"
-                value={passwordData.newPassword}
-                onChange={(value) => handleChangePassword(value, 'newPassword')}
+                id="email"
+                name="email"
+                style={{ width: '300px' }}
+                value={formData.email}
+                onChange={(value) => handleChange(value, 'email')}
+                placeholder={'Nhập email'}
               />
             </div>
 
             <div className='wrapper-input'>
-              <label htmlFor='confirmPassword'>Xác nhận mật khẩu</label>
+              <label htmlFor='phone'> Số điện thoại</label>
               <InputFormComponent
-                id="confirmPassword"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Nhập lại mật khẩu mới"
-                value={passwordData.confirmPassword}
-                onChange={(value) => handleChangePassword(value, 'confirmPassword')}
+                id="phone"
+                name="phone"
+                type="number"
+                style={{ width: '300px' }}
+                value={formData.phone}
+                onChange={(value) => handleChange(value, 'phone')}
+                placeholder={'Nhập số điện thoại'}
               />
             </div>
 
-            <label style={{ display: 'block', marginTop: 10, marginRight: 170, cursor: 'pointer' }}>
-              <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={() => setShowPassword(!showPassword)}
-                style={{ marginRight: 8 }}
+            <div className='wrapper-input'>
+              <label htmlFor='address'> Địa chỉ</label>
+              <InputFormComponent
+                id="address"
+                name="address"
+                style={{ width: '300px' }}
+                value={formData.address}
+                onChange={(value) => handleChange(value, 'address')}
+                placeholder={'Nhập địa chỉ'}
               />
-              Hiện mật khẩu
-            </label>
-          </Modal>
+            </div>
+
+            <div className='wrapper-input'>
+              <label htmlFor='avt'> Ảnh đại diện</label>
+              <Upload
+                onChange={handleOnchangeAvt}
+                accept="image/*"
+                multiple={false}
+                maxCount={1}
+                fileList={fileList}
+                showUploadList={false}
+                beforeUpload={() => false} >
+                <Button icon={<UploadOutlined />} >Tải lên</Button>
+              </Upload>
+              {avt && (
+                <img src={avt} className='img-avt' alt="avt" />
+              )}
+            </div>
 
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <ButtonComponent
-              onClick={() => setIsOpenModal(true)}
-              styleButton={{
-                background: '',
-                height: '30px',
-                width: 'fit-content',
-                border: '1px solid rgb(26,148,255)',
-                borderRadius: '4px',
-              }}
-              size={40}
-              textButton={'Đổi mật khẩu'}
-              styleTextButton={{ color: 'rgb(26,148,255)', fontSize: '15px', fontWeight: '500' }}
-            />
+            <Modal
+              title="Đổi mật khẩu"
+              open={isOpenModal}
+              onOk={handleChangePasswordOk}
+              onCancel={() => setIsOpenModal(false)}
+              okText="Xác nhận"
+              cancelText="Hủy"
+            >
+              <div className='wrapper-input'>
+                <label htmlFor='oldPassword'>Mật khẩu cũ</label>
+                <InputFormComponent
+                  id="oldPassword"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Nhập mật khẩu cũ"
+                  value={passwordData.oldPassword}
+                  onChange={(value) => handleChangePassword(value, 'oldPassword')}
+                />
+              </div>
 
-            <ButtonComponent
-              disabled={!formData.email}
-              onClick={handleUpdate}
-              styleButton={{
-                background: '',
-                height: '30px',
-                width: 'fit-content',
-                border: '1px solid rgb(26,148,255)',
-                borderRadius: '4px',
-              }}
-              size={40}
-              textButton={'Cập nhật'}
-              styleTextButton={{ color: 'rgb(26,148,255)', fontSize: '15px', fontWeight: '500' }}
-            />
+              <div className='wrapper-input'>
+                <label htmlFor='newPassword'>Mật khẩu mới</label>
+                <InputFormComponent
+                  id="newPassword"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Nhập mật khẩu mới"
+                  value={passwordData.newPassword}
+                  onChange={(value) => handleChangePassword(value, 'newPassword')}
+                />
+              </div>
+
+              <div className='wrapper-input'>
+                <label htmlFor='confirmPassword'>Xác nhận mật khẩu</label>
+                <InputFormComponent
+                  id="confirmPassword"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Nhập lại mật khẩu mới"
+                  value={passwordData.confirmPassword}
+                  onChange={(value) => handleChangePassword(value, 'confirmPassword')}
+                />
+              </div>
+
+              <label style={{ display: 'block', marginTop: 10, marginRight: 170, cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={showPassword}
+                  onChange={() => setShowPassword(!showPassword)}
+                  style={{ marginRight: 8 }}
+                />
+                Hiện mật khẩu
+              </label>
+            </Modal>
+
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <ButtonComponent
+                onClick={() => setIsOpenModal(true)}
+                styleButton={{
+                  background: '',
+                  height: '30px',
+                  width: 'fit-content',
+                  border: '1px solid rgb(26,148,255)',
+                  borderRadius: '4px',
+                }}
+                size={40}
+                textButton={'Đổi mật khẩu'}
+                styleTextButton={{ color: 'rgb(26,148,255)', fontSize: '15px', fontWeight: '500' }}
+              />
+
+              <ButtonComponent
+                disabled={!formData.email}
+                onClick={handleUpdate}
+                styleButton={{
+                  background: '',
+                  height: '30px',
+                  width: 'fit-content',
+                  border: '1px solid rgb(26,148,255)',
+                  borderRadius: '4px',
+                }}
+                size={40}
+                textButton={'Cập nhật'}
+                styleTextButton={{ color: 'rgb(26,148,255)', fontSize: '15px', fontWeight: '500' }}
+              />
+            </div>
           </div>
-        </div>
-      </LoadingComponent>
+        </LoadingComponent>
+      </div>
     </div>
   )
 }

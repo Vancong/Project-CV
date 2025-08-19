@@ -53,7 +53,7 @@ const SignUpPage = () => {
      <div className='siginPage'>
         <div className='page'>
           <h1>Đăng ký tài khoản</h1>
-          <p>Nếu bạn đã có tài khoản, đăng nhập <span onClick={handleNavigateSignIn} style={{cursor:'pointer',color:'blue'}}>tại đây</span>.</p>
+          <p>Nếu bạn đã có tài khoản, đăng nhập <span onClick={handleNavigateSignIn} style={{cursor:'pointer',color:'#0f6ecd'}}>tại đây</span>.</p>
           <InputFormComponent 
               className="inputAcccount" 
               placeholder="Email" 

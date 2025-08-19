@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./CheckoutComponent.scss"
-import { data, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import VoucherSelectorComponent from "../VoucherSelectorComponent/VoucherSelectorComponent"
 import *as VoucherSerice from "../../services/Voucher.Service";
 import { useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import { alertConfirm,alertError,alertSuccess } from '../../utils/alert';
 import *as PaymentService from "../../services/Payment.Service.js";
 import getDiscountPrice from '../../utils/getDiscountPrice.js';
 
-const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymentMethod ,isValidForm}) => {
+const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymentMethod ,validateForm}) => {
   const navigate=useNavigate();
   const [selectedVoucher, setSelectedVoucher] = useState(null);
   const [cartTotal, setCartTotal] = useState(0);
@@ -69,7 +69,6 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
     if (!cartItems || cartItems.length === 0) return;
     const updatedItems= cartItems?.map(item =>{
         const discountPrice=getDiscountPrice(item.price,item.product.discount);
-        console.log(discountPrice)
         return {...item,price: discountPrice}
     })
     let total = updatedItems.reduce((sum, item) => {
@@ -180,7 +179,7 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
 
                   <tr>
                     <td colSpan={2}>
-                       <div style={{ display: 'flex',alignItems:'center', gap: '2px',padding:'10px 0px' }}>
+                       <div style={{ display: 'flex',alignItems:'center', gap: '5px',padding:'10px 0px' }}>
                         {!selectedVoucher ? (
                           <>
                             <input
@@ -188,7 +187,7 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
                               placeholder="Mã ưu đãi"
                               value={inputVoucher}
                               onChange={onChangeInputVoucher}
-                              style={{height:'35px'}}
+                              style={{height:'35px',width:140}}
                             />
                             <VoucherSelectorComponent
                               cartTotal={cartTotal}
@@ -240,7 +239,7 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
           <p className="privacy_note">
             Thông tin cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng theo <a href="#">privacy policy</a>.
           </p>
-          {paymentMethod==='paypal' && (
+          {paymentMethod==='paypal' &&  paypalClientId &&(
           <PayPalScriptProvider 
               options={{
                 "client-id": paypalClientId, 
@@ -251,6 +250,9 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
              
                 style={{ layout: "vertical" }}
                 createOrder={(data, actions) => {
+                    if (!validateForm()) {
+                       return Promise.reject(new Error("Vui lòng nhập đầy đủ thông tin trước khi thanh toán"));
+                    }
                   return actions.order.create({
                     purchase_units: [
                       {
@@ -264,10 +266,8 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
                 }}
                 onApprove={onSuccessPayPal}
                 onError={(err) => {
-                  console.log(err)
-                  alertError("Có lỗi xảy ra khi thanh toán");
+                  alertError("Có lỗi xảy ra khi thanh toán",err.message);
                 }}
-                disabled={!isValidForm}
               />
             </PayPalScriptProvider>
           )}

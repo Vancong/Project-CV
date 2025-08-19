@@ -67,10 +67,13 @@ return (
         <div className='header_top ' 
             style={{justifyContent: isHiddenSearch&& isHiddenFavorite ?'space-between': 'unset'}}
         >
-          <Col span={6}>
-             <img src={websiteInfo?.logo} alt="logo" style={{width:50,height:50,objectFit:'cover',cursor:'pointer'}}
-              onClick={()=> navigate('/')}
-             />
+          <Col span={6} >
+            <div style= {{display:'flex',alignItems:'flex-end',gap:10}}> 
+              <img src={websiteInfo?.logo} alt="logo" style={{width:50,height:50,objectFit:'cover',cursor:'pointer'}}
+                onClick={()=> navigate('/')}
+              />
+              <h2 style={{cursor:'pointer'}}  onClick={()=> navigate('/')}>{websiteInfo?.name}</h2>
+             </div>
           </Col>
           {!isHiddenSearch&&(
             <Col span={14} style={{marginRight:10,marginLeft:-100}}>

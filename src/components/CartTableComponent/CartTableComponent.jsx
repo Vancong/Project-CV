@@ -6,9 +6,11 @@ import { increaseQuantity,decreaseQuantity,removeCart } from '../../redux/slices
 import "./CartTableComponent.scss"
 import { useDispatch, useSelector } from 'react-redux';
 import {alertError} from "../../utils/alert"
+import { useNavigate } from 'react-router-dom';
 const CartTableComponent = ({ cartItems, onIncrease, onDecrease, onRemove }) => {
     const dispatch=useDispatch();
     const user=useSelector((state)=> state.user)
+    const navigate=useNavigate();
     const handleIncrease = async (productId, volume) => {
       const data={
         productId,
@@ -59,7 +61,11 @@ const CartTableComponent = ({ cartItems, onIncrease, onDecrease, onRemove }) => 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Image src={record.product.images[0]} width={60} height={60} />
           <div>
-            <div className='title_product_cart'>{record.product.name}-{record.volume}ml</div>
+            <div onClick={()=>navigate(`/product-details/${record.product.slug}`) }
+               className='title_product_cart' >{record.product.name}-{record.volume}
+                 ml
+            </div>
+            
             <div className='btn_delete_cart' onClick={() => handleRemove(record.product._id,record.volume)}> 
                 <DeleteOutlined />
                 <span style={{paddingLeft:8}}>Xóa</span>

@@ -6,7 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import VoucherSelectorComponent from '../../components/VoucherSelectorComponent/VoucherSelectorComponent';
 import { useEffect, useState } from 'react';
 import *as VoucherSerice from "../../services/Voucher.Service"
-
+import Footer from "../../components/Footer/Footer"
+import ProductListSection from '../../components/ProductListSection/ProductListSection';
+import NavigationPathComponent from '../../components/NavigationPathComponent/NavigationPathComponent';
 const CartPage = () => {
   const cart = useSelector((state) => state.cart);
   const [selectedVoucher,setSelectedVoucher]=useState(null);
@@ -90,45 +92,46 @@ const CartPage = () => {
   return (
 
     <div className='container'>
+        <NavigationPathComponent category="Giỏ hàng"  />
         <div className='cart_page'>
             {cart?.items?.length>0 ? (
-               <>
+            <>
                     <div>
                         <CartTableComponent cartItems={cart.items} />
 
-                         {!selectedVoucher ? (
-                          <div className='voucher'>
+                        {!selectedVoucher ? (
+                        <div className='voucher'>
                             <input
-                              type="text"
-                              placeholder="Mã ưu đãi"
-                              value={inputVoucher}
-                              onChange={onChangeInputVoucher}
-                              style={{height:'35px'}}
+                            type="text"
+                            placeholder="Mã ưu đãi"
+                            value={inputVoucher}
+                            onChange={onChangeInputVoucher}
+                            style={{height:'35px'}}
                             />
                             <VoucherSelectorComponent
-                              cartTotal={cartTotalPrice}
-                              onSelect={onSelect}
+                            cartTotal={cartTotalPrice}
+                            onSelect={onSelect}
                             />
                             <button  disabled={!inputVoucher||error}  onClick={handleApplyVocuher} >
-                                  Áp dụng
+                                Áp dụng
                             </button>
-                          </div>
+                        </div>
                             ) : (
-                              <div className='voucher'>
+                            <div className='voucher'>
                                 <div>
-                                  <p>Mã ưu đãi: <b>{selectedVoucher?.code}</b></p>
-                                  <p>Tiết kiệm ngay : <b>{discountValue?.toLocaleString()}₫</b></p>
-                                   <button style={{width:'100px',height:'30px'}} onClick={() => setSelectedVoucher(null)}>Xóa</button> 
+                                <p>Mã ưu đãi: <b>{selectedVoucher?.code}</b></p>
+                                <p>Tiết kiệm ngay : <b>{discountValue?.toLocaleString()}₫</b></p>
+                                <button style={{width:'100px',height:'30px'}} onClick={() => setSelectedVoucher(null)}>Xóa</button> 
                                 </div>
-                              </div>
+                            </div>
                             )}
-                             {error&& (<p style={{color:'red',fontSize:'14px'}}>{error} </p>)}
+                            {error&& (<p style={{color:'red',fontSize:'14px'}}>{error} </p>)}
                     </div>
                     <div className='cart_btn'>
                         <div class="order_summary">
                             <div class="summary_row">
                                 <span>Tạm tính ({cart.total} sản phẩm)</span>
-                                <span class="price">{cartTotalPrice?.toLocaleString()}₫</span>
+                                <span className="price">{cartTotalPrice?.toLocaleString()}₫</span>
                             </div>
 
                             <div class="summary_row">
@@ -150,7 +153,7 @@ const CartPage = () => {
                             Tiếp tục mua hàng
                         </div>
                     </div>
-               </>
+            </>
         
             ): (
                 <div className='btn_home'>
@@ -158,8 +161,20 @@ const CartPage = () => {
                 </div>
             )}
         </div>
-    </div>
+        <ProductListSection 
+            title="Sản phẩm đang trong thời gian khuyến mãi" 
+            queryKey="saleProducts" 
+            keySort="discount" 
+            valueSort={-1} 
+        />
 
+        <ProductListSection 
+                title="Sản phẩm mới nhất" 
+                queryKey="newProducts" 
+                keySort="createdAt" 
+                valueSort={-1} 
+        />
+    </div>
   );
 };
 

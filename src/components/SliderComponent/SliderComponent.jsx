@@ -30,7 +30,7 @@ const SliderComponent = ({arrImages,autoplay,type=''}) => {
     };
     const handleClick=() =>{
       if(type==='banner'){
-        navigate('/type/deal-thom')
+        navigate('/type/deal-thom',{state:'Deal thơm'})
       }
     }
   return (

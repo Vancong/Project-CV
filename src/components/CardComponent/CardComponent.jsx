@@ -127,7 +127,7 @@ const CardComponent = (props) => {
               </div>
         </div>
 
-        <div className='info_bottom'>
+        <div className='info_bottom'  onClick={() => handleDetailProduct(slug)}>
               <p className='product_title'>{name}</p>
               <p className='product_description'>{description}</p>
               
