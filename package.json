@@ -60,5 +60,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "https://prj-be-4.onrender.com/api"
 }
