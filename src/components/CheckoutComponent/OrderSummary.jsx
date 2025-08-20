@@ -55,7 +55,7 @@ const OrderSummary = ({cartItems,handleOrder,setOrderSummary,orderSummary,paymen
       }
       try {
         const res = await VoucherSerice.check(data, userId, access_token);
-        if (res?.data?.iSuccess) {
+        if (res?.data?.isSuccess) {
           setSelectedVoucher(res.data.voucher);
           setError(false);
         }

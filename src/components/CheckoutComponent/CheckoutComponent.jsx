@@ -96,8 +96,13 @@ const CheckoutComponent = () => {
   const mutationOrder = useMutationHook(async ({ id, access_token, data }) => {
     return await OrderService.create(id, access_token, data);
   });
+  const {
+    data: dataOrder,
+    isSuccess: isSuccessOrder,
+    isError: isErrorOrder,
+    isPending: isOrdering
+  } = mutationOrder
 
-  const { data: dataOrder, isSuccess: isSuccessOrder } = mutationOrder;
 
   useEffect(() => {
     if (dataOrder?.status === 'OK') {
@@ -114,7 +119,10 @@ const CheckoutComponent = () => {
       }
       handleClearCart();
     }
-  }, [isSuccessOrder, dataOrder]);
+    if (isErrorOrder) {
+      alertError("Đặt hàng thất bại!");
+    }
+  }, [isSuccessOrder, dataOrder,isErrorOrder]);
 
   const handleOrder = (updateDataPay = null) => {
     if (!validateForm()) return;
@@ -144,7 +152,7 @@ const CheckoutComponent = () => {
 
   return (
     <div>
-      <LoadingComponent isPending={isLoading}>
+      <LoadingComponent isPending={isLoading||isOrdering}>
         <div className="checkout_page">
           <InputInfo
             formData={formData}

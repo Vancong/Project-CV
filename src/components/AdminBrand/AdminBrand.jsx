@@ -52,7 +52,7 @@ const AdminBrand = () => {
     {
       title: 'Tên thương hiệu',
       dataIndex: 'name',
-      render: text => <a>{text}</a>,
+      render: text => <span>{text}</span>,
       sorter: (a,b) => a.name.length - b.name.length
     },
     {
@@ -121,7 +121,7 @@ const AdminBrand = () => {
       return await  BrandService.deleteBrand(id, access_token )
   });
 
-   const{data:dataDelete, isPending: isPendingDelete,isSuccess: isSuccessDelete,
+   const{data:dataDelete,isSuccess: isSuccessDelete,
     isError:isErrorDelete}=deleteBrandMutation;
     useEffect(() => {
       if (isSuccessDelete && dataDelete?.status === 'OK') {
@@ -144,7 +144,7 @@ const AdminBrand = () => {
     }
 
     
-    const{data:dataDeleteMany, isPending: isPendingDeleteMany
+    const{data:dataDeleteMany
         ,isSuccess: isSuccessDeleteMany,isError:isErrorDeleteMany}=mutationDeleteManyBrand;
       useEffect(() => {
         if (isSuccessDeleteMany && dataDeleteMany?.status === 'OK') {

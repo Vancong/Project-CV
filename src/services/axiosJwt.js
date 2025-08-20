@@ -7,6 +7,9 @@ const axiosJwt = axios.create({
   withCredentials: true, 
 })
 
+
+
+
 axiosJwt.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('access_token');

@@ -1,5 +1,5 @@
   import React, { Fragment, useEffect, useState } from 'react'
-  import {BrowserRouter as Router, Routes,Route, Navigate, data} from "react-router-dom";
+  import {BrowserRouter as Router, Routes,Route, Navigate} from "react-router-dom";
   import { routes } from './routes';
   import DefaultComponent from './components/DefaultComponent/DefaultComponent';
   import { jwtDecode } from 'jwt-decode';

@@ -62,7 +62,6 @@ const CartPage = () => {
 
 
     const handleApplyVocuher=async ()=>{
-        console.log('ok')
         const userId=user?.id;
         const access_token=user?.access_token;
         const data={
@@ -71,9 +70,10 @@ const CartPage = () => {
         }
         try {
             const res = await VoucherSerice.check(data, userId, access_token);
-            if (res?.data?.iSuccess) {
-            setSelectedVoucher(res.data.voucher);
-            setError(false);
+            if (res?.data?.isSuccess) {
+                setSelectedVoucher(res.data.voucher);
+                setDiscountValue(res.data.discountValue)
+                setError(false);
             }
         } catch (error) {
             setError( error.response?.data?.message);

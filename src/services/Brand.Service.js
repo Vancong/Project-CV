@@ -19,6 +19,7 @@ export const createBrand = async (data,access_token) => {
 
 export const getDetailBrand = async (id,access_token) => {
 
+
   const res = await axios.get(`${process.env.REACT_APP_API_URL}/brand/detail/${id}`);
   return res.data;
 

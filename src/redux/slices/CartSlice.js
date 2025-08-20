@@ -58,11 +58,14 @@ const CartSlice = createSlice({
     },
     removeCart: (state, action) => {
       const { productId, volume } = action.payload;
-      const itemRemove=state.items.find(item =>item.product._id===productId&& item.volume===volume);
-      state.totalPrice-=itemRemove.quantity*itemRemove.price;
       state.items = state.items.filter(item => item.product._id !== productId ||item.volume !== volume);
+        console.log(state.totalPrice)
+      state.totalPrice = state.items.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
       state.total-=1;
-      
+      console.log(state.totalPrice)
     },
     clearCart: (state) => {
       state.items = []; 

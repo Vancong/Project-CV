@@ -27,7 +27,10 @@ const VoucherSelectorComponent = ({ cartTotal, onSelect }) => {
         <List
           dataSource={voucherData?.data}
           renderItem={(item) => {
-            const isEligible = cartTotal >= item.minOrderValue&& new Date() >=new Date(item.startDate) ;
+            const isEligible = cartTotal >= item.minOrderValue&& new Date() >=new Date(item.startDate)&&
+                                (!item.userLimit || 
+                                 !item.usedBy?.some(us => us.userId === user.id && us.count >= item.userLimit));
+;
             return (
               <List.Item
                 actions={[
