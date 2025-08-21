@@ -226,7 +226,7 @@ const AdminNote = () => {
          <NoteFormComponent 
             form={formUpdate}
             onFinish={onUpdateNote}
-            // isLoading={isPendingUpdate}
+            isLoading={isPendingUpdate}
             mode='update'
         />
       </DrawerComponent>

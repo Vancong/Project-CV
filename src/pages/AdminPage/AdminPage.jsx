@@ -28,7 +28,7 @@ const items = [
 
 ]
   const rootSubmenuKeys=['user','product']
-  const [keySelected,setKeySelected]= useState('');
+  const [keySelected,setKeySelected]= useState(localStorage.getItem('adminKey') || 'stats');
   const renderPage= (key) =>{
     switch(key) {
 
@@ -85,6 +85,7 @@ const items = [
   }
   const handleOnclick = ({key}) =>{
     setKeySelected(key)
+    localStorage.setItem('adminKey', key); 
   }
   return (
     <>
@@ -103,6 +104,7 @@ const items = [
           }}
           items={items}
           onClick={handleOnclick}
+          
         />
         <div className='content' >
           {renderPage(keySelected)}

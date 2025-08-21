@@ -1,8 +1,8 @@
-import { Button ,DatePicker  ,Select } from 'antd'
+import { DatePicker  ,Select } from 'antd'
 import React, { useEffect, useState } from 'react'
-import {PlusOutlined,EditOutlined,DeleteOutlined} from '@ant-design/icons'
+import {EditOutlined} from '@ant-design/icons'
 import { useSelector } from 'react-redux'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import TableComponents from '../TableComponents/TableComponents'
 import ButtonInputSearch from '../ButtonInputSearch/ButtonInputSearch'
 import *as OrderSerivce from "../../services/Order.Service";
@@ -10,7 +10,7 @@ import OrderDetailModal from './OrderDetailModal'
 import { getStatusLabel } from '../../utils/orderStatus'
 import './AdminOrder.scss'
 
-const AdminNote = () => {
+const AdminOrder = () => {
   const [isModalOpen,setIsModalOpen]=useState(false);
   const user=useSelector(state => state.user)
   const [currentPage, setCurrentPage] = useState(1);
@@ -214,4 +214,4 @@ const AdminNote = () => {
   )
 }
 
-export default AdminNote
+export default AdminOrder

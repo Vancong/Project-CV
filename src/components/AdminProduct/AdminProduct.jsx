@@ -166,7 +166,7 @@ const AdminProduct = () => {
     'Unisex': 'Unisex', 
   };
   const dataTable = (products?.data || []).map(product => ({ ...product, key: product._id,
-    brand: product.brand.name,
+    brand: product?.brand?.name,
     gender: GENDER_LABELS[product.gender]}));
   
 
